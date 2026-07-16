@@ -22,7 +22,22 @@ module.exports = {
           use: "babel-loader",
       },
       {
+          test: /\.module\.css$/,
+          use: [
+              "style-loader",
+              {
+                  loader: "css-loader",
+                  options: {
+                      modules: {
+                          namedExport: false,
+                      },
+                  },
+              },
+          ],
+      },
+      {
           test: /\.css$/,
+          exclude: /\.module\.css$/,
           use: ["style-loader", "css-loader"],
       },
       ],
