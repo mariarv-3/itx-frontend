@@ -24,6 +24,7 @@
     "@babel/preset-react": "^8.0.1",
     "@babel/preset-typescript": "^8.0.1",
     "@eslint/js": "^10.0.1",
+    "@types/jest": "^30.0.0",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@typescript-eslint/eslint-plugin": "^8.64.0",
@@ -36,11 +37,22 @@
     "globals": "^17.7.0",
     "html-webpack-plugin": "^5.6.7",
     "jest": "^30.4.2",
+    "jest-environment-jsdom": "^30.4.1",
     "style-loader": "^4.0.0",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.64.0",
     "webpack": "^5.108.4",
     "webpack-cli": "^7.2.1",
     "webpack-dev-server": "^6.0.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "moduleNameMapper": {
+      "\\.module\\.css$": "<rootDir>/src/__mocks__/styleMock.js",
+      "\\.css$": "<rootDir>/src/__mocks__/styleMock.js"
+    },
+    "transform": {
+      "^.+\\.(ts|tsx|js|jsx)$": "babel-jest"
+    }
   }
 }
