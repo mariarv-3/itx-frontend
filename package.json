@@ -1,34 +1,35 @@
 {
-  "name": "itx-frontend",
+  "name": "itx-phone-store",
   "version": "1.0.0",
   "description": "Test application for purchasing mobile devices.",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "private": true,
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mariarv-3/itx-frontend.git"
+    "url": "git+https://github.com/mariarv-3/itx-frontend-test.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/mariarv-3/itx-frontend/issues"
+  "scripts": {
+    "start": "webpack serve --mode development --open",
+    "build": "webpack --mode production",
+    "test": "jest",
+    "lint": "eslint src --ext .ts,.tsx"
   },
-  "homepage": "https://github.com/mariarv-3/itx-frontend#readme",
   "dependencies": {
     "react": "^19.2.7",
-    "react-dom": "^19.2.7"
+    "react-dom": "^19.2.7",
+    "react-router-dom": "^7.18.1"
   },
   "devDependencies": {
     "@babel/core": "^8.0.1",
     "@babel/preset-env": "^8.0.2",
     "@babel/preset-react": "^8.0.1",
     "@babel/preset-typescript": "^8.0.1",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
     "babel-loader": "^10.1.1",
     "css-loader": "^7.1.4",
+    "eslint": "^10.7.0",
     "html-webpack-plugin": "^5.6.7",
+    "jest": "^30.4.2",
     "style-loader": "^4.0.0",
     "typescript": "^7.0.2",
     "webpack": "^5.108.4",

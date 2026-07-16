@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+      "target": "ES2022",
+      "module": "ESNext",
+      "lib": ["DOM", "DOM.Iterable", "ES2022"],
+      "jsx": "react-jsx",
+      "moduleResolution": "Node",
+      "esModuleInterop": true,
+      "allowSyntheticDefaultImports": true,
+      "strict": true,
+      "isolatedModules": true,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true,
+      "noEmit": true
+  },
+  "include": ["src"]
+}
