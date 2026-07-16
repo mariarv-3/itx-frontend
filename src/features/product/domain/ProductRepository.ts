@@ -1,7 +1,6 @@
-import type { Product } from "./Product";
+import type { Product, ProductDetail } from "./Product";
 
 export interface ProductRepository {
   getProducts(): Promise<Product[]>;
-
-  getProduct(id: string): Promise<Product>;
+  getProduct(id: string): Promise<ProductDetail>;
 }
