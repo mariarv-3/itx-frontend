@@ -45,6 +45,6 @@ export class LocalStorageCache {
   }
 
   private isExpired(timestamp: number): boolean {
-    return Date.now() - timestamp > this.expirationTime;
+    return Date.now() - timestamp >= this.expirationTime;
   }
 }
