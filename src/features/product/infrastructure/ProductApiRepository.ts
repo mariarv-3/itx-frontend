@@ -1,80 +1,53 @@
-import type { ProductRepository } from "../domain/ProductRepository";
 import type { Product } from "../domain/Product";
-import { mapProduct } from "./ProductMapper";
+import type { ProductRepository } from "../domain/ProductRepository";
 import type { ProductApiResponse } from "./ProductApiResponse";
-
-const API_URL = "https://itx-frontend-test.onrender.com";
-const CACHE_EXPIRATION_MS = 60 * 60 * 1000; // 1 hora en milisegundos
-
-interface CacheItem<T> {
-  timestamp: number;
-  data: T;
-}
+import { LocalStorageCache } from "./cache/LocalStorageCache";
+import { mapProduct } from "./ProductMapper";
+import { API_URL } from "../../../shared/config/api";
 
 export class ProductApiRepository implements ProductRepository {
-  private getCache<T>(key: string): T | null {
-    try {
-      const cached = localStorage.getItem(key);
-      if (!cached) return null;
-
-      const parsed: CacheItem<T> = JSON.parse(cached);
-      if (Date.now() - parsed.timestamp > CACHE_EXPIRATION_MS) {
-        localStorage.removeItem(key);
-        return null;
-      }
-      return parsed.data;
-    } catch (e) {
-      console.error('Error reading from cache', e);
-      return null;
-    }
-  }
-
-  private setCache<T>(key: string, data: T): void {
-    try {
-      const cacheItem: CacheItem<T> = {
-        timestamp: Date.now(),
-        data,
-      };
-      localStorage.setItem(key, JSON.stringify(cacheItem));
-    } catch (e) {
-      console.error('Error writing to cache', e);
-    }
-  }
+  constructor(
+    private readonly cache: LocalStorageCache
+  ) {}
 
   async getProducts(): Promise<Product[]> {
-    const cacheKey = "CACHE_PRODUCTS_LIST";
-    const cachedData = this.getCache<ProductApiResponse[]>(cacheKey);
+    const cacheKey = "product:list";
+    const cached = this.cache.get<ProductApiResponse[]>(cacheKey);
 
-    if (cachedData) {
-      console.log('Serving products list from cache');
-      return cachedData.map(mapProduct);
+    if (cached) {
+      return cached.map(mapProduct);
     }
 
-    console.log('Fetching products list from API');
     const response = await fetch(`${API_URL}/api/product`);
-    if (!response.ok) throw new Error('Failed to fetch products');
-    
-    const data: ProductApiResponse[] = await response.json();
-    this.setCache(cacheKey, data);
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch products (${response.status})`);
+    }
+
+    const data = (await response.json()) as ProductApiResponse[];
+
+    this.cache.set(cacheKey, data);
 
     return data.map(mapProduct);
   }
 
   async getProduct(id: string): Promise<Product> {
-    const cacheKey = `CACHE_PRODUCT_${id}`;
-    const cachedData = this.getCache<ProductApiResponse>(cacheKey);
+    const cacheKey = `product:${id}`;
+    const cached = this.cache.get<ProductApiResponse>(cacheKey);
 
-    if (cachedData) {
-      console.log(`Serving product ${id} from cache`);
-      return mapProduct(cachedData);
+    if (cached) {
+      return mapProduct(cached);
     }
 
-    console.log(`Fetching product ${id} from API`);
     const response = await fetch(`${API_URL}/api/product/${id}`);
-    if (!response.ok) throw new Error(`Failed to fetch product ${id}`);
 
-    const data: ProductApiResponse = await response.json();
-    this.setCache(cacheKey, data);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch product ${id} (${response.status})`);
+    }
+
+    const data = (await response.json()) as ProductApiResponse;
+
+    this.cache.set(cacheKey, data);
 
     return mapProduct(data);
   }

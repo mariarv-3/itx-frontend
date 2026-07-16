@@ -12,7 +12,7 @@ export function mapProduct(
     model: product.model,
     price: product.price
       ? Number(product.price)
-      : undefined,
+      : null,
     imageUrl: product.imgUrl,
   };
 }
