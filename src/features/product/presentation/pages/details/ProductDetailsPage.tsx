@@ -2,20 +2,21 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
 // Domain & Application Product
-import type { ProductDetail } from "../../domain/Product";
-import { ProductApiRepository } from "../../infrastructure/ProductApiRepository";
-import { LocalStorageCache } from "../../infrastructure/cache/LocalStorageCache";
-import { GetProductUseCase } from "../../application/GetProductUseCase";
+import type { ProductDetail } from "../../../domain/Product";
+import { ProductApiRepository } from "../../../infrastructure/ProductApiRepository";
+import { LocalStorageCache } from "../../../infrastructure/cache/LocalStorageCache";
+import { GetProductUseCase } from "../../../application/GetProductUseCase";
 
 // Domain & Application Cart
-import { useCart } from "../../../../features/cart/presentation/CartContext";
-import { CartApiRepository } from "../../../../features/cart/infrastructure/CartApiRepository";
-import { AddToCartUseCase } from "../../../../features/cart/application/AddToCartUseCase";
+import { useCart } from "../../../../../features/cart/presentation/CartContext";
+import { CartApiRepository } from "../../../../../features/cart/infrastructure/CartApiRepository";
+import { AddToCartUseCase } from "../../../../../features/cart/application/AddToCartUseCase";
 
 // Shared
-import { Header } from "../../../../shared/components/Header";
-import { Skeleton } from "../../../../shared/components/Skeleton";
-import { EmptyState } from "../../../../shared/components/EmptyState";
+import { Header } from "../../../../../shared/components/Header";
+import { Skeleton } from "../../../../../shared/components/Skeleton";
+import { EmptyState } from "../../../../../shared/components/EmptyState";
+import { dictionary } from "../../../../../shared/i18n/en";
 import styles from "./ProductDetailsPage.module.css";
 
 // Color map: IDs from API → hex values
@@ -131,7 +132,7 @@ export const ProductDetailsPage = () => {
       setAdded(true);
       setTimeout(() => setAdded(false), 2500);
     } catch (err) {
-      setCartError(err instanceof Error ? err.message : "Could not add product to cart");
+      setCartError(err instanceof Error ? err.message : dictionary.productDetails.errorAddCart);
     }
   };
 
@@ -150,7 +151,7 @@ export const ProductDetailsPage = () => {
       <div className={styles.container}>
         <Link to="/" className={styles.back}>
           <span className={styles.backArrow}>←</span>
-          Back to all phones
+          {dictionary.productDetails.back}
         </Link>
 
         {isLoading && (
@@ -173,7 +174,7 @@ export const ProductDetailsPage = () => {
           </div>
         )}
         
-        {error && <EmptyState title="Error Loading Product Details" description={error} />}
+        {error && <EmptyState title={dictionary.productDetails.errorLoad} description={error} />}
 
         {product && (
           <div className={styles.layout}>
@@ -202,14 +203,14 @@ export const ProductDetailsPage = () => {
                   })}
                 </p>
               ) : (
-                <p className={styles.priceFallback}>Price unavailable</p>
+                <p className={styles.priceFallback}>{dictionary.productDetails.priceUnavailable}</p>
               )}
 
               {/* Purchase Options selectors */}
               <div className={styles.options}>
                 {product.options.colors.length > 0 && (
                   <div>
-                    <p className={styles.optionLabel}>Color</p>
+                    <p className={styles.optionLabel}>{dictionary.productDetails.colorLabel}</p>
                     <div className={styles.colorSwatches}>
                       {product.options.colors.map((color) => (
                         <button
@@ -228,7 +229,7 @@ export const ProductDetailsPage = () => {
 
                 {product.options.storages.length > 0 && (
                   <div>
-                    <p className={styles.optionLabel}>Storage</p>
+                    <p className={styles.optionLabel}>{dictionary.productDetails.storageLabel}</p>
                     <div className={styles.storageChips}>
                       {product.options.storages.map((storage) => (
                         <button
@@ -253,16 +254,16 @@ export const ProductDetailsPage = () => {
                   onClick={handleAddToCart}
                   disabled={!canAddToCart}
                 >
-                  Add to cart
+                  {dictionary.productDetails.addToCart}
                 </button>
 
-                {added && <div className={styles.toast}>✓ Added to cart</div>}
+                {added && <div className={styles.toast}>{dictionary.productDetails.addedSuccess}</div>}
                 {cartError && <div className={styles.toastError}>{cartError}</div>}
               </div>
 
               {/* Product Specifications Table */}
               <div className={styles.specsSection}>
-                <p className={styles.specsTitle}>Specifications</p>
+                <p className={styles.specsTitle}>{dictionary.productDetails.specsTitle}</p>
                 <div className={styles.specsTable}>
                   {SPEC_GROUPS.map(([label, key]) => {
                     const value = formatSpecValue(product[key]);

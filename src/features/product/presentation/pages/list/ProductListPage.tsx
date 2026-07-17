@@ -1,13 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
-import type { Product } from "../../domain/Product";
-import { ProductApiRepository } from "../../infrastructure/ProductApiRepository";
-import { LocalStorageCache } from "../../infrastructure/cache/LocalStorageCache";
-import { GetProductsUseCase } from "../../application/GetProductsUseCase";
-import { ProductItem } from "../components/ProductItem";
-import { SearchBar } from "../components/SearchBar";
-import { Header } from "../../../../shared/components/Header";
-import { Skeleton } from "../../../../shared/components/Skeleton";
-import { EmptyState } from "../../../../shared/components/EmptyState";
+import type { Product } from "../../../domain/Product";
+import { ProductApiRepository } from "../../../infrastructure/ProductApiRepository";
+import { LocalStorageCache } from "../../../infrastructure/cache/LocalStorageCache";
+import { GetProductsUseCase } from "../../../application/GetProductsUseCase";
+import { ProductItem } from "../../components/ProductItem";
+import { SearchBar } from "../../components/SearchBar";
+import { Header } from "../../../../../shared/components/Header";
+import { Skeleton } from "../../../../../shared/components/Skeleton";
+import { EmptyState } from "../../../../../shared/components/EmptyState";
+import { dictionary } from "../../../../../shared/i18n/en";
 import styles from "./ProductListPage.module.css";
 
 export function ProductListPage() {
@@ -30,7 +31,7 @@ export function ProductListPage() {
         setProducts(data);
       } catch (err: unknown) {
         console.error("Error al cargar productos:", err);
-        setError(err instanceof Error ? err.message : "Ocurrió un error inesperado");
+        setError(err instanceof Error ? err.message : dictionary.productList.error);
       } finally {
         setIsLoading(false);
       }
@@ -70,7 +71,7 @@ export function ProductListPage() {
             </div>
           </>
         ) : error ? (
-          <EmptyState title="Error Loading Products" description={error} />
+          <EmptyState title={dictionary.productList.error} description={error} />
         ) : (
           <>
             <div className={styles.topBar}>
@@ -84,8 +85,8 @@ export function ProductListPage() {
                 ))
               ) : (
                 <EmptyState 
-                  title="No results found" 
-                  description={`We couldn't find any products matching "${searchQuery}". Please try another search.`} 
+                  title={dictionary.productList.noResultsTitle} 
+                  description={dictionary.productList.noResultsDesc(searchQuery)} 
                 />
               )}
             </div>
