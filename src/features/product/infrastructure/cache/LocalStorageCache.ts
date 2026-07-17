@@ -9,6 +9,7 @@ export class LocalStorageCache {
     private readonly expirationTime = 60 * 60 * 1000
   ) {}
 
+
   get<T>(key: string): T | null {
     try {
       const item = localStorage.getItem(key);
@@ -27,24 +28,37 @@ export class LocalStorageCache {
       return parsed.data;
 
     } catch {
-      // Invalid cache entries are ignored and treated as cache misses.
       return null;
     }
   }
 
-  set<T>(key: string, data: T): void {
-    const item: CacheItem<T> = {
-      timestamp: Date.now(),
-      data,
-    };
 
-    localStorage.setItem(
-      key,
-      JSON.stringify(item)
-    );
+  set<T>(
+    key: string,
+    data: T
+  ): void {
+    try {
+      const item: CacheItem<T> = {
+        timestamp: Date.now(),
+        data,
+      };
+
+      localStorage.setItem(
+        key,
+        JSON.stringify(item)
+      );
+
+    } catch {
+      // Cache failures should not break the application.
+    }
   }
 
-  private isExpired(timestamp: number): boolean {
-    return Date.now() - timestamp >= this.expirationTime;
+
+  private isExpired(
+    timestamp: number
+  ): boolean {
+    return (
+      Date.now() - timestamp >= this.expirationTime
+    );
   }
 }

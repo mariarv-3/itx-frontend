@@ -62,7 +62,7 @@ export const ProductDetailsPage = () => {
   const [error, setError] = useState<string | null>(null);
 
   const [selectedColor, setSelectedColor] = useState<number | null>(null);
-  const [selectedStorage, setSelectedStorage] = useState<string | null>(null);
+  const [selectedStorage, setSelectedStorage] = useState<number | null>(null);
   const [added, setAdded] = useState(false);
 
   useEffect(() => {
@@ -74,8 +74,8 @@ export const ProductDetailsPage = () => {
         const data = await getProductUseCase.execute(id);
         setProduct(data);
         // Pre-select first available options
-        if (data.colors.length > 0) setSelectedColor(data.colors[0]);
-        if (data.internalMemory.length > 0) setSelectedStorage(data.internalMemory[0]);
+        if (data.options.colors.length > 0) setSelectedColor(data.options.colors[0].code);
+        if (data.options.storages.length > 0) setSelectedStorage(data.options.storages[0].code);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Unknown error");
       } finally {
@@ -88,12 +88,12 @@ export const ProductDetailsPage = () => {
 
   const canAddToCart =
     product !== null &&
-    (product.colors.length === 0 || selectedColor !== null) &&
-    (product.internalMemory.length === 0 || selectedStorage !== null);
+    (product.options.colors.length === 0 || selectedColor !== null) &&
+    (product.options.storages.length === 0 || selectedStorage !== null);
 
   const handleAddToCart = () => {
     if (!product || !canAddToCart) return;
-    addItem(product, selectedColor ?? 0, selectedStorage ?? "");
+    addItem(product, selectedColor ?? 0, selectedStorage ?? 0);
     setAdded(true);
     setTimeout(() => setAdded(false), 2500);
   };
@@ -101,6 +101,7 @@ export const ProductDetailsPage = () => {
   const formatSpecValue = (value: ProductDetail[SpecKey]): string | null => {
     if (value === null || value === undefined) return null;
     if (Array.isArray(value)) return value.join(", ");
+    if (typeof value === "object") return null;
     if (typeof value === "number") return String(value);
     return value;
   };
@@ -156,41 +157,41 @@ export const ProductDetailsPage = () => {
 
               {/* ── Options ── */}
               <div className={styles.options}>
-                {product.colors.length > 0 && (
+                {product.options.colors.length > 0 && (
                   <div>
                     <p className={styles.optionLabel}>Color</p>
                     <div className={styles.colorSwatches}>
-                      {product.colors.map((colorId) => (
+                      {product.options.colors.map((color) => (
                         <button
-                          key={colorId}
+                          key={color.code}
                           className={`${styles.swatch} ${
-                            selectedColor === colorId ? styles.swatchSelected : ""
+                            selectedColor === color.code ? styles.swatchSelected : ""
                           }`}
                           style={{
-                            backgroundColor: COLOR_MAP[colorId] ?? "#cccccc",
+                            backgroundColor: COLOR_MAP[color.code] ?? "#cccccc",
                           }}
-                          onClick={() => setSelectedColor(colorId)}
-                          aria-label={`Color ${colorId}`}
-                          title={`Color ${colorId}`}
+                          onClick={() => setSelectedColor(color.code)}
+                          aria-label={`Color ${color.name}`}
+                          title={`Color ${color.name}`}
                         />
                       ))}
                     </div>
                   </div>
                 )}
 
-                {product.internalMemory.length > 0 && (
+                {product.options.storages.length > 0 && (
                   <div>
                     <p className={styles.optionLabel}>Storage</p>
                     <div className={styles.storageChips}>
-                      {product.internalMemory.map((storage) => (
+                      {product.options.storages.map((storage) => (
                         <button
-                          key={storage}
+                          key={storage.code}
                           className={`${styles.chip} ${
-                            selectedStorage === storage ? styles.chipSelected : ""
+                            selectedStorage === storage.code ? styles.chipSelected : ""
                           }`}
-                          onClick={() => setSelectedStorage(storage)}
+                          onClick={() => setSelectedStorage(storage.code)}
                         >
-                          {storage}
+                          {storage.name}
                         </button>
                       ))}
                     </div>

@@ -26,9 +26,9 @@ export function ProductListPage() {
         setIsLoading(true);
         const data = await getProductsUseCase.execute();
         setProducts(data);
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error("Error al cargar productos:", err);
-        setError(err.message || "Ocurrió un error inesperado");
+        setError(err instanceof Error ? err.message : "Ocurrió un error inesperado");
       } finally {
         setIsLoading(false);
       }

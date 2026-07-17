@@ -6,37 +6,74 @@ export interface ProductApiResponse {
   imgUrl: string;
 }
 
+export interface ColorApiResponse {
+  code: number;
+  name: string;
+}
+
+export interface StorageApiResponse {
+  code: number;
+  name: string;
+}
+
 export interface ProductDetailApiResponse extends ProductApiResponse {
+  // Network
   networkTechnology?: string;
   networkSpeed?: string;
   gprs?: string;
   edge?: string;
+
+  // Launch
   announced?: string;
   status?: string;
-  dimentions?: string; // Note: API uses typo "dimentions"
+
+  // Body
+  // API typo: "dimentions"
+  dimentions?: string;
   weight?: string;
-  sim?: string;
+  sim?: string | string[];
+
+  // Display
   displayType?: string;
   displayResolution?: string;
   displaySize?: string;
+
+  // Platform
   os?: string;
   cpu?: string;
   chipset?: string;
   gpu?: string;
+
+  // Memory
   externalMemory?: string;
   internalMemory?: string[];
   ram?: string;
+
+  // Camera
   primaryCamera?: string[] | string;
   secondaryCamera?: string;
+
+  // Battery
   battery?: string;
   batteryTalkTime?: string;
   batteryMusicTime?: string;
-  wlan?: string;
-  bluetooth?: string;
+
+  // Connectivity
+  wlan?: string | string[];
+  bluetooth?: string | string[];
   gps?: string;
   nfc?: string;
-  radioRadio?: string;
+  radio?: string | string[];
   usb?: string;
-  sensors?: string;
-  colors?: number[];
+
+  // Features
+  sensors?: string | string[];
+
+  colors?: string[];
+
+  // Purchase options
+  options?: {
+    colors: ColorApiResponse[];
+    storages: StorageApiResponse[];
+  };
 }

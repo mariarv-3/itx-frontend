@@ -10,31 +10,32 @@ const mockProduct: Product = {
   imageUrl: "https://example.com/iphone.jpg",
 };
 
-const mockRepository: jest.Mocked<ProductRepository> = {
-  getProducts: jest.fn().mockResolvedValue([mockProduct]),
-  getProduct: jest.fn(),
-};
-
 describe("GetProductsUseCase", () => {
   let useCase: GetProductsUseCase;
+  let mockRepository: jest.Mocked<ProductRepository>;
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    mockRepository = {
+      getProducts: jest.fn().mockResolvedValue([mockProduct]),
+      getProduct: jest.fn(),
+    };
+
     useCase = new GetProductsUseCase(mockRepository);
   });
 
-  it("calls repository.getProducts()", async () => {
+  it("should call repository.getProducts() once", async () => {
     await useCase.execute();
     expect(mockRepository.getProducts).toHaveBeenCalledTimes(1);
   });
 
-  it("returns the list of products from the repository", async () => {
+  it("should return the list of products from the repository", async () => {
     const result = await useCase.execute();
     expect(result).toEqual([mockProduct]);
   });
 
-  it("propagates errors thrown by the repository", async () => {
+  it("should propagate errors thrown by the repository", async () => {
     mockRepository.getProducts.mockRejectedValueOnce(new Error("Network error"));
+
     await expect(useCase.execute()).rejects.toThrow("Network error");
   });
 });
