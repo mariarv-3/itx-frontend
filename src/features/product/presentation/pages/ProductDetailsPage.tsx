@@ -14,6 +14,8 @@ import { AddToCartUseCase } from "../../../../features/cart/application/AddToCar
 
 // Shared
 import { Header } from "../../../../shared/components/Header";
+import { Skeleton } from "../../../../shared/components/Skeleton";
+import { EmptyState } from "../../../../shared/components/EmptyState";
 import styles from "./ProductDetailsPage.module.css";
 
 // Color map: IDs from API → hex values
@@ -151,8 +153,27 @@ export const ProductDetailsPage = () => {
           Back to all phones
         </Link>
 
-        {isLoading && <div className={styles.stateWrapper}>Loading…</div>}
-        {error && <div className={styles.stateWrapper}>Error: {error}</div>}
+        {isLoading && (
+          <div className={styles.layout}>
+            <div className={styles.imageWrapper}>
+              <Skeleton width="100%" height="400px" borderRadius="16px" />
+            </div>
+            <div className={styles.info}>
+              <Skeleton width="150px" height="24px" borderRadius="4px" />
+              <div style={{ marginTop: '0.5rem' }}>
+                <Skeleton width="80%" height="40px" borderRadius="4px" />
+              </div>
+              <div style={{ marginTop: '2rem' }}>
+                <Skeleton width="100px" height="32px" borderRadius="4px" />
+              </div>
+              <div style={{ marginTop: '3rem' }}>
+                <Skeleton width="100%" height="300px" borderRadius="8px" />
+              </div>
+            </div>
+          </div>
+        )}
+        
+        {error && <EmptyState title="Error Loading Product Details" description={error} />}
 
         {product && (
           <div className={styles.layout}>

@@ -13,7 +13,7 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(calc(25% - 1.75rem), 1fr));
   gap: 1.75rem;
 }
 

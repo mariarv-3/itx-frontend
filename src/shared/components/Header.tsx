@@ -1,11 +1,20 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useCart } from '../../features/cart/presentation/CartContext';
+import { useEffect, useState } from 'react';
 import styles from './Header.module.css';
 
 export const Header = () => {
   const location = useLocation();
   const { count } = useCart();
+  const [isBumping, setIsBumping] = useState(false);
   const pathnames = location.pathname.split('/').filter(x => x);
+
+  useEffect(() => {
+    if (count === 0) return;
+    setIsBumping(true);
+    const timer = setTimeout(() => setIsBumping(false), 400);
+    return () => clearTimeout(timer);
+  }, [count]);
 
   return (
     <header className={styles.header}>
@@ -27,7 +36,7 @@ export const Header = () => {
         </nav>
       </div>
 
-      <div className={styles.cart}>
+      <div className={`${styles.cart} ${isBumping ? styles.cartBumping : ''}`}>
         <div className={styles.cartIcon}>
           <svg
             xmlns="http://www.w3.org/2000/svg"

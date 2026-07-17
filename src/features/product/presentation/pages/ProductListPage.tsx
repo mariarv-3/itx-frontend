@@ -6,6 +6,8 @@ import { GetProductsUseCase } from "../../application/GetProductsUseCase";
 import { ProductItem } from "../components/ProductItem";
 import { SearchBar } from "../components/SearchBar";
 import { Header } from "../../../../shared/components/Header";
+import { Skeleton } from "../../../../shared/components/Skeleton";
+import { EmptyState } from "../../../../shared/components/EmptyState";
 import styles from "./ProductListPage.module.css";
 
 export function ProductListPage() {
@@ -55,9 +57,20 @@ export function ProductListPage() {
 
       <main className={styles.container}>
         {isLoading ? (
-          <div className={styles.message}>Loading products...</div>
+          <>
+            <div className={styles.topBar}>
+              <Skeleton width="100%" height="40px" borderRadius="8px" className={styles.searchSkeleton} />
+            </div>
+            <div className={styles.grid}>
+              {Array.from({ length: 8 }).map((_, i) => (
+                <div key={i} className={styles.skeletonCard}>
+                  <Skeleton width="100%" height="280px" borderRadius="12px" />
+                </div>
+              ))}
+            </div>
+          </>
         ) : error ? (
-          <div className={styles.message}>Error: {error}</div>
+          <EmptyState title="Error Loading Products" description={error} />
         ) : (
           <>
             <div className={styles.topBar}>
@@ -70,9 +83,10 @@ export function ProductListPage() {
                   <ProductItem key={product.id} product={product} />
                 ))
               ) : (
-                <div className={`${styles.message} ${styles.empty}`}>
-                  No products found matching "{searchQuery}"
-                </div>
+                <EmptyState 
+                  title="No results found" 
+                  description={`We couldn't find any products matching "${searchQuery}". Please try another search.`} 
+                />
               )}
             </div>
           </>
