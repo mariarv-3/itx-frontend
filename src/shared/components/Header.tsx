@@ -1,16 +1,18 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useCart } from '../../features/cart/presentation/CartContext';
+import { useBreadcrumb } from '../context/BreadcrumbContext';
 import { useEffect, useState } from 'react';
 import styles from './Header.module.css';
 
 export const Header = () => {
   const location = useLocation();
   const { count } = useCart();
+  const { productName } = useBreadcrumb();
   const [isBumping, setIsBumping] = useState(false);
-  const pathnames = location.pathname.split('/').filter(x => x);
 
   useEffect(() => {
     if (count === 0) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsBumping(true);
     const timer = setTimeout(() => setIsBumping(false), 400);
     return () => clearTimeout(timer);
@@ -24,15 +26,12 @@ export const Header = () => {
         </Link>
         <nav className={styles.breadcrumbs}>
           <Link to="/">Home</Link>
-          {pathnames.map((value, index) => {
-            const to = `/${pathnames.slice(0, index + 1).join('/')}`;
-            return (
-              <span key={to}>
-                {' / '}
-                <Link to={to}>{value}</Link>
-              </span>
-            );
-          })}
+          {location.pathname.startsWith('/product/') && productName && (
+            <span>
+              {' / '}
+              <span>{productName}</span>
+            </span>
+          )}
         </nav>
       </div>
 

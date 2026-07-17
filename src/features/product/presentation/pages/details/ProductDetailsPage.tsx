@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 
 // Domain & Application Product
 import type { ProductDetail } from "../../../domain/Product";
 import { useProductDetail } from "../../hooks/useProductDetail";
+import { useBreadcrumb } from "../../../../../shared/context/BreadcrumbContext";
 
 // Domain & Application Cart
 import { useCart } from "../../../../../features/cart/presentation/CartContext";
@@ -64,9 +65,18 @@ const SPEC_GROUPS: [string, SpecKey][] = [
 export const ProductDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
   const { addItem } = useCart();
+  const { setProductName } = useBreadcrumb();
 
   // Custom hook for data fetching
   const { product, isLoading, error } = useProductDetail(id);
+
+  // Auto-set breadcrumb when product loads
+  useEffect(() => {
+    if (product) {
+      setProductName(product.model);
+    }
+    return () => setProductName(null);
+  }, [product, setProductName]);
 
   // Selector States
   const [selectedColor, setSelectedColor] = useState<number | null>(null);
@@ -76,22 +86,19 @@ export const ProductDetailsPage = () => {
   const [added, setAdded] = useState(false);
   const [cartError, setCartError] = useState<string | null>(null);
 
-  // Auto-select first options when product changes
-  useEffect(() => {
-    if (product) {
-      if (product.options.colors.length > 0) {
-        setSelectedColor(product.options.colors[0].code);
-      }
-      if (product.options.storages.length > 0) {
-        setSelectedStorage(product.options.storages[0].code);
-      }
-    }
-  }, [product]);
+  // Derived State for initial selections
+  const currentColor = selectedColor !== null
+    ? selectedColor
+    : (product?.options.colors?.[0]?.code ?? null);
+
+  const currentStorage = selectedStorage !== null
+    ? selectedStorage
+    : (product?.options.storages?.[0]?.code ?? null);
 
   const canAddToCart =
     product !== null &&
-    (product.options.colors.length === 0 || selectedColor !== null) &&
-    (product.options.storages.length === 0 || selectedStorage !== null);
+    currentColor !== null &&
+    currentStorage !== null;
 
   const handleAddToCart = async () => {
     if (!product || !canAddToCart) return;
@@ -99,14 +106,11 @@ export const ProductDetailsPage = () => {
     try {
       setCartError(null);
 
-      const colorCode = selectedColor ?? 0;
-      const storageCode = selectedStorage ?? 0;
-
       // API call first
-      await addToCartUseCase.execute(product.id, colorCode, storageCode);
+      await addToCartUseCase.execute(product.id, currentColor, currentStorage);
 
       // Update local state context if successful
-      addItem(product, colorCode, storageCode);
+      addItem(product, currentColor, currentStorage);
 
       setAdded(true);
       setTimeout(() => setAdded(false), 2500);
@@ -118,7 +122,7 @@ export const ProductDetailsPage = () => {
   const formatSpecValue = (value: ProductDetail[SpecKey]): string | null => {
     if (value === null || value === undefined) return null;
     if (Array.isArray(value)) return value.join(", ");
-    if (typeof value === "object") return null; // Avoid rendering raw option objects as strings
+    if (typeof value === "object") return null;
 
     return String(value);
   };
@@ -152,7 +156,7 @@ export const ProductDetailsPage = () => {
             </div>
           </div>
         )}
-        
+
         {error && <EmptyState title={dictionary.productDetails.errorLoad} description={error} />}
 
         {product && (
@@ -164,6 +168,7 @@ export const ProductDetailsPage = () => {
                   src={product.imageUrl}
                   alt={`${product.brand} ${product.model}`}
                   className={styles.image}
+                  style={{ viewTransitionName: `product-image-${product.id}` }}
                 />
               </div>
             </div>
@@ -195,11 +200,12 @@ export const ProductDetailsPage = () => {
                         <button
                           key={color.code}
                           className={`${styles.swatch} ${
-                            selectedColor === color.code ? styles.swatchSelected : ""
+                            currentColor === color.code ? styles.swatchSelected : ""
                           }`}
                           style={{ backgroundColor: COLOR_MAP[color.code] ?? "#cccccc" }}
                           onClick={() => setSelectedColor(color.code)}
-                          aria-label={`Color ${color.name}`}
+                          aria-label={color.name}
+                          aria-pressed={currentColor === color.code}
                         />
                       ))}
                     </div>
@@ -214,9 +220,11 @@ export const ProductDetailsPage = () => {
                         <button
                           key={storage.code}
                           className={`${styles.chip} ${
-                            selectedStorage === storage.code ? styles.chipSelected : ""
+                            currentStorage === storage.code ? styles.chipSelected : ""
                           }`}
                           onClick={() => setSelectedStorage(storage.code)}
+                          aria-label={`Storage capacity ${storage.name}`}
+                          aria-pressed={currentStorage === storage.code}
                         >
                           {storage.name}
                         </button>

@@ -1,14 +1,16 @@
 import { Outlet } from "react-router-dom";
+import { CartProvider } from "./features/cart/presentation/CartContext";
+import { BreadcrumbProvider } from "./shared/context/BreadcrumbContext";
 
 function App() {
     return (
-        <>
-            {/* Header */}
-
-            <main>
-                <Outlet />
-            </main>
-        </>
+        <BreadcrumbProvider>
+            <CartProvider>
+                <main>
+                    <Outlet />
+                </main>
+            </CartProvider>
+        </BreadcrumbProvider>
     );
 }
 

@@ -11,10 +11,11 @@ export const ProductItem = ({ product }: ProductItemProps) => {
   return (
     <Link to={`/product/${product.id}`} className={styles.card}>
       <div className={styles.imageContainer}>
-        <img 
-          src={product.imageUrl} 
-          alt={`${product.brand} ${product.model}`} 
+        <img
+          src={product.imageUrl}
+          alt={`${product.brand} ${product.model}`}
           className={styles.image}
+          style={{ viewTransitionName: `product-image-${product.id}` }}
           loading="lazy"
         />
       </div>

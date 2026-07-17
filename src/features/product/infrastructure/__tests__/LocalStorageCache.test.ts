@@ -1,6 +1,5 @@
 import { LocalStorageCache } from "../cache/LocalStorageCache";
 
-// Minimal localStorage mock for Node/Jest environment
 const localStorageMock = (() => {
   let store: Record<string, string> = {};
 

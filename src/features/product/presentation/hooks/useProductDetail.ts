@@ -9,11 +9,6 @@ export function useProductDetail(id: string | undefined) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Initializing selected options here to return them is one approach,
-  // but typically forms/selectors stay in the component. We will return 
-  // raw data and let the component handle its form state, or manage initial
-  // states here. For flexibility, we'll just fetch the data here.
-  
   const getProductUseCase = useMemo(() => {
     return new GetProductUseCase(
       new ProductApiRepository(new LocalStorageCache())
