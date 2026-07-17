@@ -1,128 +1,230 @@
-# Mobile Device Store - ITX Frontend Test
+# ITX Mobile Device Store - Frontend Test
 
-Technical challenge for building a mobile devices e-commerce application as a Single Page Application (SPA).
+A Single Page Application (SPA) for a mobile device store, developed as part of the ITX frontend technical challenge.
 
-## 🚀 Getting Started
+The main goal of the implementation is to keep the codebase maintainable and easy to evolve, applying a clear separation between business logic, data access and UI concerns.
+
+---
+
+## 🚀 Quick Start
 
 ### Requirements
 
-* Node.js v18 or higher
-* npm v9 or higher
+* Node.js (v18 or higher recommended)
+* npm
 
 ### Installation
-
-Clone the repository and install the dependencies:
 
 ```bash
 npm install
 ```
 
-### Available Scripts
+### Run the application
 
-* `npm start` - Starts the development server at `http://localhost:3000`.
-* `npm run build` - Creates a production build in the `dist` folder.
-* `npm run test` - Runs unit tests with Jest.
-* `npm run lint` - Runs ESLint checks.
+```bash
+npm start
+```
 
----
+The application will be available at:
 
-## 🏗 Architecture & Technical Decisions
+```
+http://localhost:3000
+```
 
-The project follows a **Hexagonal Architecture (Ports & Adapters)** approach combined with some **Domain-Driven Design (DDD)** principles, adapted for a frontend application.
+### Run tests
 
-The main goal is to keep business logic independent from the UI framework and external services.
+```bash
+npm test
+```
 
-### Layers
+### Production build
 
-* **Domain (`domain`)**
+```bash
+npm run build
+```
 
-  * Contains core models, repository interfaces (ports), and business definitions.
-  * Has no dependencies on React or external libraries.
-
-* **Application (`application`)**
-
-  * Contains use cases that coordinate application flows between the presentation layer and infrastructure.
-
-* **Infrastructure (`infrastructure`)**
-
-  * Contains repository implementations, API communication (`fetch`) and client-side persistence.
-  * Includes a localStorage-based cache system with a 1-hour expiration.
-
-* **Presentation (`presentation`)**
-
-  * Contains React components, hooks, contexts and UI-related logic.
-  * Responsible only for displaying data and handling user interaction.
+The production bundle will be generated in the `dist` folder.
 
 ---
 
-## 🛠 Tech Stack
+# 🏗️ Architecture
 
-* **React 19**
-* **TypeScript** with strict configuration
-* **Webpack 5 + Babel** custom setup
+The project follows a feature-based structure inspired by **Hexagonal Architecture (Ports & Adapters)** and **Domain-Driven Design principles**.
+
+The main idea is to keep external dependencies (React, API calls, browser storage) separated from the core application logic.
+
+The codebase is organized into business features:
+
+* `product`
+* `cart`
+
+Each feature contains its own layers:
+
+### `domain/`
+
+Contains the core models and repository contracts.
+
+This layer does not depend on React or infrastructure details.
+
+### `application/`
+
+Contains the use cases that coordinate application flows.
+
+Examples:
+
+* `GetProductsUseCase`
+* `GetProductUseCase`
+* `AddToCartUseCase`
+
+### `infrastructure/`
+
+Contains implementations that interact with external systems:
+
+* API repositories
+* API response mappers
+* LocalStorage cache implementation
+
+### `presentation/`
+
+Contains React-related code:
+
+* Pages
+* Components
+* Custom hooks
+* Contexts
+
+The UI layer consumes use cases without knowing how data is retrieved.
+
+---
+
+# 📁 Project Structure
+
+```text
+src/
+├── main.tsx
+├── App.tsx
+├── routes.tsx
+│
+├── features/
+│   ├── cart/
+│   │   ├── application/       # Cart use cases
+│   │   ├── domain/            # Cart models and contracts
+│   │   ├── infrastructure/    # Cart API repository
+│   │   └── presentation/      # Cart context and UI logic
+│   │
+│   └── product/
+│       ├── application/       # Product use cases
+│       ├── domain/            # Product models and interfaces
+│       ├── infrastructure/    # API repositories, mappers and cache
+│       └── presentation/
+│           ├── components/    # Reusable UI components
+│           ├── hooks/         # Presentation hooks
+│           └── pages/
+│               ├── details/   # Product detail page
+│               └── list/      # Product listing page
+│
+└── shared/
+    ├── components/            # Shared UI components
+    └── config/                # Global configuration
+```
+
+---
+
+# 🛠️ Technical Stack
+
+* **React + TypeScript**
+* **React Router v6**
 * **CSS Modules** for component-scoped styling
 * **Jest** for unit testing
-* **ESLint** for code quality
+* **Webpack + Babel** configured manually
 
 ---
 
-## 🌟 Implemented Features
+# ✨ Implemented Features
 
-### Product Listing (PLP)
+## Product listing
 
-* Responsive product grid layout.
-* Real-time search by brand and model.
-* Product data loaded from the provided API.
+* Responsive product grid
+* Search by brand and model
+* API integration through repositories
+* Cached API responses
 
-### Product Detail (PDP)
+## Product details
 
-* Full product information display.
-* Dynamic specification rendering.
-* Color and storage selection.
-* Add-to-cart flow connected to the API.
+* Complete product information display
+* Dynamic specifications section
+* Color selection
+* Storage selection
+* Add to cart functionality
 
-### API Integration
+## Cart
 
-Implemented endpoints:
+* Product addition flow
+* Cart counter in the header
+* API integration when adding products
 
-* `GET /api/product`
+## API Cache
 
-  * Retrieves the product catalogue.
+API responses are stored in `localStorage`.
 
-* `GET /api/product/:id`
+Cache behaviour:
 
-  * Retrieves product details.
+* Data is stored after successful API requests
+* Cached data is reused for 1 hour
+* Expired entries are automatically ignored and refreshed
 
-* `POST /api/cart`
+## Error handling
 
-  * Adds a selected product configuration to the cart.
-
-### Client-side Cache
-
-* API responses are stored locally using `localStorage`.
-* Cached data expires after 1 hour.
-* Expired entries are automatically refreshed from the API.
-
-### Error Handling
-
-* API failures are handled through controlled errors.
-* Loading and error states are displayed in the UI.
+API failures and unexpected errors are handled gracefully to avoid breaking the user experience.
 
 ---
 
-## 🧪 Testing
+# 🧪 Testing
 
-Unit tests cover:
+Unit tests cover the main pieces of application logic:
 
-* API mappers.
-* Local storage cache behaviour.
-* Use cases.
-* Repository-related logic.
+* API response mappers
+* LocalStorage cache behaviour
+* Use cases
+
+The goal is to verify business behaviour independently from the UI.
 
 ---
 
-## 📝 Additional Notes
+# 💡 Technical Decisions
 
-* Webpack is configured with `historyApiFallback` to support direct navigation to application routes.
-* The application uses dependency injection through constructors to keep repositories and use cases easily testable.
-* The codebase aims to keep responsibilities separated between UI, business logic and external integrations.
+### Why feature-based architecture?
+
+The application is divided by business capability rather than technical type.
+
+This makes it easier to add new features without creating a large shared folder with unrelated code.
+
+### Why not Redux?
+
+The current application state is limited mainly to the shopping cart.
+
+React Context provides enough functionality without introducing unnecessary complexity.
+
+### Why use repositories?
+
+Repositories isolate API access from the rest of the application.
+
+This allows replacing the data source in the future without changing the UI or business logic.
+
+---
+
+# 🔮 Possible Future Improvements
+
+For a production-scale application, some improvements could be considered:
+
+* Add end-to-end testing with Playwright or Cypress
+* Introduce CI/CD checks for tests, linting and builds
+* Add pagination or infinite scrolling for larger catalogues
+* Improve offline capabilities with PWA features
+* Consider a dedicated state management solution if application state grows significantly
+
+---
+
+## Final notes
+
+The implementation focuses on keeping responsibilities separated, making the code easier to understand, test and maintain while staying aligned with the requirements of the challenge.
