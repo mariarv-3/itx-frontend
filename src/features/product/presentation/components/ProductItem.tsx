@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import type { Product } from '../../domain/Product';
+import { dictionary } from '../../../../shared/i18n/en';
 import styles from './ProductItem.module.css';
 
 interface ProductItemProps {
@@ -26,7 +27,7 @@ export const ProductItem = ({ product }: ProductItemProps) => {
           {product.price !== null ? (
             <p className={styles.price}>{product.price}€</p>
           ) : (
-            <p className={styles.priceFallback}>Price unavailable</p>
+            <p className={styles.priceFallback}>{dictionary.productItem.priceUnavailable}</p>
           )}
         </div>
       </div>

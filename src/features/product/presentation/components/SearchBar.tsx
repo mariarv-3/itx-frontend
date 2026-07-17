@@ -1,5 +1,6 @@
 import type { ChangeEvent } from 'react';
 import styles from './SearchBar.module.css';
+import { dictionary } from '../../../../shared/i18n/en';
 
 interface SearchBarProps {
   value: string;
@@ -16,7 +17,7 @@ export const SearchBar = ({ value, onChange }: SearchBarProps) => {
       <input
         type="text"
         className={styles.searchInput}
-        placeholder="Search for a brand or model..."
+        placeholder={dictionary.searchBar.placeholder}
         value={value}
         onChange={handleChange}
       />

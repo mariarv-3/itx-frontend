@@ -3,9 +3,7 @@ import { Link, useParams } from "react-router-dom";
 
 // Domain & Application Product
 import type { ProductDetail } from "../../../domain/Product";
-import { ProductApiRepository } from "../../../infrastructure/ProductApiRepository";
-import { LocalStorageCache } from "../../../infrastructure/cache/LocalStorageCache";
-import { GetProductUseCase } from "../../../application/GetProductUseCase";
+import { useProductDetail } from "../../hooks/useProductDetail";
 
 // Domain & Application Cart
 import { useCart } from "../../../../../features/cart/presentation/CartContext";
@@ -34,7 +32,6 @@ const COLOR_MAP: Record<number, string> = {
 };
 
 // UseCase initializations
-const getProductUseCase = new GetProductUseCase(new ProductApiRepository(new LocalStorageCache()));
 const addToCartUseCase = new AddToCartUseCase(new CartApiRepository());
 
 type SpecKey = keyof ProductDetail;
@@ -68,10 +65,8 @@ export const ProductDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
   const { addItem } = useCart();
 
-  // Page Loading & Error States
-  const [product, setProduct] = useState<ProductDetail | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  // Custom hook for data fetching
+  const { product, isLoading, error } = useProductDetail(id);
 
   // Selector States
   const [selectedColor, setSelectedColor] = useState<number | null>(null);
@@ -81,33 +76,17 @@ export const ProductDetailsPage = () => {
   const [added, setAdded] = useState(false);
   const [cartError, setCartError] = useState<string | null>(null);
 
+  // Auto-select first options when product changes
   useEffect(() => {
-    if (!id) return;
-
-    const loadProduct = async () => {
-      try {
-        setIsLoading(true);
-        setError(null);
-
-        const data = await getProductUseCase.execute(id);
-        setProduct(data);
-
-        // Auto-select first options if available
-        if (data.options.colors.length > 0) {
-          setSelectedColor(data.options.colors[0].code);
-        }
-        if (data.options.storages.length > 0) {
-          setSelectedStorage(data.options.storages[0].code);
-        }
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Unknown error");
-      } finally {
-        setIsLoading(false);
+    if (product) {
+      if (product.options.colors.length > 0) {
+        setSelectedColor(product.options.colors[0].code);
       }
-    };
-
-    loadProduct();
-  }, [id]);
+      if (product.options.storages.length > 0) {
+        setSelectedStorage(product.options.storages[0].code);
+      }
+    }
+  }, [product]);
 
   const canAddToCart =
     product !== null &&
