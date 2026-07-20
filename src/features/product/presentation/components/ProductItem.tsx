@@ -7,31 +7,49 @@ interface ProductItemProps {
   product: Product;
 }
 
-export const ProductItem = ({ product }: ProductItemProps) => {
-  return (
-    <Link to={`/product/${product.id}`} className={styles.card}>
-      <div className={styles.imageContainer}>
-        <img
-          src={product.imageUrl}
-          alt={`${product.brand} ${product.model}`}
-          className={styles.image}
-          style={{ viewTransitionName: `product-image-${product.id}` }}
-          loading="lazy"
-        />
+export const ProductItem = ({ product }: ProductItemProps) => (
+  <Link
+    to={`/product/${product.id}`}
+    className={styles.card}
+    aria-label={`${product.brand} ${product.model}`}
+  >
+    <div className={styles.imageContainer}>
+      <img
+        src={product.imageUrl}
+        alt={`${product.brand} ${product.model}`}
+        className={styles.image}
+        style={{
+          viewTransitionName: `product-image-${product.id}`,
+        }}
+        loading="lazy"
+      />
+    </div>
+
+    <div className={styles.content}>
+      <div className={styles.info}>
+        <h2 className={styles.brand}>
+          {product.brand}
+        </h2>
+
+        <p className={styles.model}>
+          {product.model}
+        </p>
       </div>
-      <div className={styles.content}>
-        <div>
-          <h2 className={styles.brand}>{product.brand}</h2>
-          <h3 className={styles.model}>{product.model}</h3>
-        </div>
-        <div>
-          {product.price !== null ? (
-            <p className={styles.price}>{product.price}€</p>
-          ) : (
-            <p className={styles.priceFallback}>{dictionary.productItem.priceUnavailable}</p>
-          )}
-        </div>
+
+      <div className={styles.footer}>
+        {product.price !== null ? (
+          <p className={styles.price}>
+            {product.price.toLocaleString("es-ES", {
+              style: "currency",
+              currency: "EUR",
+            })}
+          </p>
+        ) : (
+          <p className={styles.priceFallback}>
+            {dictionary.productItem.priceUnavailable}
+          </p>
+        )}
       </div>
-    </Link>
-  );
-};
+    </div>
+  </Link>
+);

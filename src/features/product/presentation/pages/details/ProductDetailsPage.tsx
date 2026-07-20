@@ -1,76 +1,30 @@
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 
-// Domain & Application Product
-import type { ProductDetail } from "../../../domain/Product";
 import { useProductDetail } from "../../hooks/useProductDetail";
 import { useBreadcrumb } from "../../../../../shared/context/BreadcrumbContext";
 
-// Domain & Application Cart
+import { ProductOptions } from "../../components/details/ProductOptions";
+import { ProductSpecs } from "../../components/details/ProductSpecs";
+
 import { useCart } from "../../../../../features/cart/presentation/CartContext";
 import { CartApiRepository } from "../../../../../features/cart/infrastructure/CartApiRepository";
 import { AddToCartUseCase } from "../../../../../features/cart/application/AddToCartUseCase";
 
-// Shared
 import { Header } from "../../../../../shared/components/Header";
 import { Skeleton } from "../../../../../shared/components/Skeleton";
 import { EmptyState } from "../../../../../shared/components/EmptyState";
 import { dictionary } from "../../../../../shared/i18n/en";
 import styles from "./ProductDetailsPage.module.css";
 
-// Color map: IDs from API → hex values
-const COLOR_MAP: Record<number, string> = {
-  1: "#1a1a1a",
-  2: "#ffffff",
-  3: "#c0392b",
-  4: "#2980b9",
-  5: "#27ae60",
-  6: "#f39c12",
-  7: "#8e44ad",
-  8: "#95a5a6",
-  9: "#e67e22",
-  10: "#16a085",
-};
-
-// UseCase initializations
 const addToCartUseCase = new AddToCartUseCase(new CartApiRepository());
-
-type SpecKey = keyof ProductDetail;
-
-const SPEC_GROUPS: [string, SpecKey][] = [
-  ["Network", "networkTechnology"],
-  ["Network Speed", "networkSpeed"],
-  ["OS", "os"],
-  ["CPU", "cpu"],
-  ["Chipset", "chipset"],
-  ["GPU", "gpu"],
-  ["RAM", "ram"],
-  ["Display", "displayType"],
-  ["Resolution", "displayResolution"],
-  ["Size", "displaySize"],
-  ["SIM", "sim"],
-  ["Dimensions", "dimensions"],
-  ["Weight", "weight"],
-  ["Battery", "battery"],
-  ["WLAN", "wlan"],
-  ["Bluetooth", "bluetooth"],
-  ["GPS", "gps"],
-  ["NFC", "nfc"],
-  ["USB", "usb"],
-  ["Sensors", "sensors"],
-  ["Announced", "announced"],
-  ["Status", "status"],
-];
 
 export const ProductDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
   const { addItem } = useCart();
   const { setProductName } = useBreadcrumb();
-
-  // Custom hook for data fetching
   const { product, isLoading, error } = useProductDetail(id);
 
-  // Auto-set breadcrumb when product loads
   useEffect(() => {
     if (product) {
       setProductName(product.model);
@@ -78,15 +32,12 @@ export const ProductDetailsPage = () => {
     return () => setProductName(null);
   }, [product, setProductName]);
 
-  // Selector States
   const [selectedColor, setSelectedColor] = useState<number | null>(null);
   const [selectedStorage, setSelectedStorage] = useState<number | null>(null);
 
-  // Cart Operation States
   const [added, setAdded] = useState(false);
   const [cartError, setCartError] = useState<string | null>(null);
 
-  // Derived State for initial selections
   const currentColor = selectedColor !== null
     ? selectedColor
     : (product?.options.colors?.[0]?.code ?? null);
@@ -117,14 +68,6 @@ export const ProductDetailsPage = () => {
     } catch (err) {
       setCartError(err instanceof Error ? err.message : dictionary.productDetails.errorAddCart);
     }
-  };
-
-  const formatSpecValue = (value: ProductDetail[SpecKey]): string | null => {
-    if (value === null || value === undefined) return null;
-    if (Array.isArray(value)) return value.join(", ");
-    if (typeof value === "object") return null;
-
-    return String(value);
   };
 
   return (
@@ -161,7 +104,6 @@ export const ProductDetailsPage = () => {
 
         {product && (
           <div className={styles.layout}>
-            {/* Image Section */}
             <div className={styles.imageWrapper}>
               <div className={styles.imageContainer}>
                 <img
@@ -173,7 +115,6 @@ export const ProductDetailsPage = () => {
               </div>
             </div>
 
-            {/* Main Info Section */}
             <div className={styles.info}>
               <p className={styles.brand}>{product.brand}</p>
               <h1 className={styles.model}>{product.model}</h1>
@@ -190,51 +131,14 @@ export const ProductDetailsPage = () => {
                 <p className={styles.priceFallback}>{dictionary.productDetails.priceUnavailable}</p>
               )}
 
-              {/* Purchase Options selectors */}
-              <div className={styles.options}>
-                {product.options.colors.length > 0 && (
-                  <div>
-                    <p className={styles.optionLabel}>{dictionary.productDetails.colorLabel}</p>
-                    <div className={styles.colorSwatches}>
-                      {product.options.colors.map((color) => (
-                        <button
-                          key={color.code}
-                          className={`${styles.swatch} ${
-                            currentColor === color.code ? styles.swatchSelected : ""
-                          }`}
-                          style={{ backgroundColor: COLOR_MAP[color.code] ?? "#cccccc" }}
-                          onClick={() => setSelectedColor(color.code)}
-                          aria-label={color.name}
-                          aria-pressed={currentColor === color.code}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                )}
+              <ProductOptions
+                options={product.options}
+                currentColor={currentColor}
+                currentStorage={currentStorage}
+                onColorSelect={setSelectedColor}
+                onStorageSelect={setSelectedStorage}
+              />
 
-                {product.options.storages.length > 0 && (
-                  <div>
-                    <p className={styles.optionLabel}>{dictionary.productDetails.storageLabel}</p>
-                    <div className={styles.storageChips}>
-                      {product.options.storages.map((storage) => (
-                        <button
-                          key={storage.code}
-                          className={`${styles.chip} ${
-                            currentStorage === storage.code ? styles.chipSelected : ""
-                          }`}
-                          onClick={() => setSelectedStorage(storage.code)}
-                          aria-label={`Storage capacity ${storage.name}`}
-                          aria-pressed={currentStorage === storage.code}
-                        >
-                          {storage.name}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Action Buttons & Feedback */}
               <div className={styles.actions}>
                 <button
                   className={styles.btnPrimary}
@@ -248,23 +152,7 @@ export const ProductDetailsPage = () => {
                 {cartError && <div className={styles.toastError}>{cartError}</div>}
               </div>
 
-              {/* Product Specifications Table */}
-              <div className={styles.specsSection}>
-                <p className={styles.specsTitle}>{dictionary.productDetails.specsTitle}</p>
-                <div className={styles.specsTable}>
-                  {SPEC_GROUPS.map(([label, key]) => {
-                    const value = formatSpecValue(product[key]);
-                    if (!value) return null;
-
-                    return (
-                      <div key={key} className={styles.specRow}>
-                        <span className={styles.specKey}>{label}</span>
-                        <span className={styles.specValue}>{value}</span>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
+              <ProductSpecs product={product} />
 
             </div>
           </div>

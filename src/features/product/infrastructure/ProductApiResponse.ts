@@ -6,17 +6,9 @@ export interface ProductApiResponse {
   imgUrl: string;
 }
 
-export interface ColorApiResponse {
-  code: number;
-  name: string;
-}
+export interface ProductDetailApiResponse
+  extends ProductApiResponse {
 
-export interface StorageApiResponse {
-  code: number;
-  name: string;
-}
-
-export interface ProductDetailApiResponse extends ProductApiResponse {
   // Network
   networkTechnology?: string;
   networkSpeed?: string;
@@ -72,8 +64,20 @@ export interface ProductDetailApiResponse extends ProductApiResponse {
   colors?: string[];
 
   // Purchase options
-  options?: {
-    colors: ColorApiResponse[];
-    storages: StorageApiResponse[];
-  };
+  options?: ProductOptionsApiResponse;
+}
+
+export interface ProductOptionsApiResponse {
+  colors: ColorApiResponse[];
+  storages: StorageApiResponse[];
+}
+
+export interface ColorApiResponse {
+  code: number;
+  name: string;
+}
+
+export interface StorageApiResponse {
+  code: number;
+  name: string;
 }

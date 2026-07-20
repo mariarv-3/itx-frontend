@@ -1,3 +1,12 @@
+export interface Product {
+  id: string;
+  brand: string;
+  model: string;
+  price: number | null;
+  imageUrl: string;
+}
+
+
 export interface ColorOption {
   code: number;
   name: string;
@@ -11,14 +20,6 @@ export interface StorageOption {
 export interface ProductOptions {
   colors: ColorOption[];
   storages: StorageOption[];
-}
-
-export interface Product {
-  id: string;
-  brand: string;
-  model: string;
-  price: number | null;
-  imageUrl: string;
 }
 
 export interface ProductDetail extends Product {

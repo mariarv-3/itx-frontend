@@ -1,0 +1,69 @@
+.options {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.optionLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #8b8b8b;
+  margin: 0 0 0.75rem;
+}
+
+/* Color swatches */
+.colorSwatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.swatch {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  outline: none;
+}
+
+.swatch:hover { transform: scale(1.15); }
+
+.swatchSelected {
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px #111;
+}
+
+/* Storage chips */
+.storageChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chip {
+  padding: 0.5rem 1.1rem;
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #555;
+  background: #f7f7f7;
+  border: 1px solid #eaeaea;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.chip:hover {
+  border-color: #111;
+  color: #111;
+}
+
+.chipSelected {
+  background: #111;
+  border-color: #111;
+  color: #fff;
+}

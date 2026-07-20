@@ -4,10 +4,9 @@ interface CacheItem<T> {
 }
 
 export class LocalStorageCache {
+  constructor(private readonly expirationTime = 60 * 60 * 1000) {
 
-  constructor(
-    private readonly expirationTime = 60 * 60 * 1000
-  ) {}
+  }
 
 
   get<T>(key: string): T | null {
@@ -33,10 +32,7 @@ export class LocalStorageCache {
   }
 
 
-  set<T>(
-    key: string,
-    data: T
-  ): void {
+  set<T>(key: string, data: T): void {
     try {
       const item: CacheItem<T> = {
         timestamp: Date.now(),
@@ -54,11 +50,7 @@ export class LocalStorageCache {
   }
 
 
-  private isExpired(
-    timestamp: number
-  ): boolean {
-    return (
-      Date.now() - timestamp >= this.expirationTime
-    );
+  private isExpired(timestamp: number): boolean {
+    return (Date.now() - timestamp >= this.expirationTime);
   }
 }

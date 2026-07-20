@@ -7,14 +7,28 @@
 .searchInput {
   width: 100%;
   max-width: 280px;
+
   padding: 0.85rem 1.25rem;
-  font-family: inherit;
+
+  font: inherit;
   font-size: 0.85rem;
   color: #1a1a1a;
+
   background-color: #f7f7f7;
   border: 1px solid transparent;
   border-radius: 100px;
-  transition: all 0.25s ease;
+
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.searchInput::-webkit-search-decoration,
+.searchInput::-webkit-search-cancel-button,
+.searchInput::-webkit-search-results-button,
+.searchInput::-webkit-search-results-decoration {
+  display: none;
 }
 
 .searchInput::placeholder {
@@ -22,7 +36,7 @@
   font-weight: 400;
 }
 
-.searchInput:focus {
+.searchInput:focus-visible {
   outline: none;
   background-color: #fff;
   border-color: #eaeaea;

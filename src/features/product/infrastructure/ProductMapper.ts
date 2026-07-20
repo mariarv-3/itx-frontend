@@ -1,17 +1,9 @@
-import type {
-  Product,
-  ProductDetail,
-} from "../domain/Product";
-
-import type {
-  ProductApiResponse,
-  ProductDetailApiResponse,
-} from "./ProductApiResponse";
+import type { Product, ProductDetail } from "../domain/Product";
+import type { ProductApiResponse, ProductDetailApiResponse } from "./ProductApiResponse";
 
 
-function normalizeValue(
-  value?: string | string[]
-): string | null {
+
+function normalizeValue(value?: string | string[]): string | null {
   if (value === undefined || value === null) {
     return null;
   }
@@ -22,25 +14,31 @@ function normalizeValue(
 }
 
 
-export function mapProduct(
-  product: ProductApiResponse
-): Product {
+function normalizePrice(price?: string): number | null {
+  if (!price) {
+    return null;
+  }
+
+  const value = Number(price);
+
+  return Number.isNaN(value)
+    ? null
+    : value;
+}
+
+
+export function mapProduct(product: ProductApiResponse): Product {
   return {
     id: product.id,
     brand: product.brand,
     model: product.model,
-    price:
-      product.price && !Number.isNaN(Number(product.price))
-        ? Number(product.price)
-        : null,
+    price: normalizePrice(product.price),
     imageUrl: product.imgUrl,
   };
 }
 
 
-export function mapProductDetail(
-  product: ProductDetailApiResponse
-): ProductDetail {
+export function mapProductDetail(product: ProductDetailApiResponse): ProductDetail {
   return {
     ...mapProduct(product),
 

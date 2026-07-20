@@ -15,11 +15,12 @@ export const SearchBar = ({ value, onChange }: SearchBarProps) => {
   return (
     <div className={styles.searchContainer}>
       <input
-        type="text"
+        type="search"
         className={styles.searchInput}
         placeholder={dictionary.searchBar.placeholder}
         value={value}
         onChange={handleChange}
+        aria-label={dictionary.searchBar.placeholder}
       />
     </div>
   );

@@ -1,8 +1,8 @@
-import { useState, useEffect, useMemo } from "react";
-import type { Product } from "../../domain/Product";
+import { useEffect, useMemo, useState } from "react";
+import { GetProductsUseCase } from "../../application/GetProductsUseCase";
 import { ProductApiRepository } from "../../infrastructure/ProductApiRepository";
 import { LocalStorageCache } from "../../infrastructure/cache/LocalStorageCache";
-import { GetProductsUseCase } from "../../application/GetProductsUseCase";
+import type { Product } from "../../domain/Product";
 import { dictionary } from "../../../../shared/i18n/en";
 
 export function useProducts() {
@@ -10,21 +10,35 @@ export function useProducts() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const getProductsUseCase = useMemo(() => {
-    return new GetProductsUseCase(
-      new ProductApiRepository(new LocalStorageCache())
-    );
-  }, []);
+  const getProductsUseCase = useMemo(
+    () =>
+      new GetProductsUseCase(
+        new ProductApiRepository(
+          new LocalStorageCache()
+        )
+      ),
+    []
+  );
 
   useEffect(() => {
     const loadProducts = async () => {
       try {
         setIsLoading(true);
-        const data = await getProductsUseCase.execute();
+
+        const data =
+          await getProductsUseCase.execute();
+
         setProducts(data);
-      } catch (err: unknown) {
-        console.error("Error al cargar productos:", err);
-        setError(err instanceof Error ? err.message : dictionary.productList.error);
+
+      } catch (err) {
+        console.error("Failed to load products", err);
+
+        setError(
+          err instanceof Error
+            ? err.message
+            : dictionary.productList.error
+        );
+
       } finally {
         setIsLoading(false);
       }
@@ -33,5 +47,9 @@ export function useProducts() {
     loadProducts();
   }, [getProductsUseCase]);
 
-  return { products, isLoading, error };
+  return {
+    products,
+    isLoading,
+    error,
+  };
 }

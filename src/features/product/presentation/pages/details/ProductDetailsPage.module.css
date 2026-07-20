@@ -8,7 +8,7 @@
   padding: 3.5rem 2.5rem 6rem;
 }
 
-/* ── Back link ── */
+
 .back {
   display: inline-flex;
   align-items: center;
@@ -32,7 +32,7 @@
 
 .back:hover .backArrow { transform: translateX(-3px); }
 
-/* ── Layout ── */
+
 .layout {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -40,7 +40,7 @@
   align-items: start;
 }
 
-/* ── Image ── */
+
 .imageWrapper {
   position: sticky;
   top: 6rem;
@@ -66,7 +66,7 @@
 
 .imageContainer:hover .image { transform: scale(1.03); }
 
-/* ── Info ── */
+
 .info { padding-top: 1rem; }
 
 .brand {
@@ -109,78 +109,7 @@
   font-style: italic;
 }
 
-/* ── Options ── */
-.options {
-  margin-top: 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
 
-.optionLabel {
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #8b8b8b;
-  margin: 0 0 0.75rem;
-}
-
-/* Color swatches */
-.colorSwatches {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-}
-
-.swatch {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  border: 2px solid transparent;
-  cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-  outline: none;
-}
-
-.swatch:hover { transform: scale(1.15); }
-
-.swatchSelected {
-  box-shadow: 0 0 0 2px #fff, 0 0 0 4px #111;
-}
-
-/* Storage chips */
-.storageChips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.chip {
-  padding: 0.5rem 1.1rem;
-  font-family: inherit;
-  font-size: 0.8rem;
-  font-weight: 500;
-  color: #555;
-  background: #f7f7f7;
-  border: 1px solid #eaeaea;
-  border-radius: 100px;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.chip:hover {
-  border-color: #111;
-  color: #111;
-}
-
-.chipSelected {
-  background: #111;
-  border-color: #111;
-  color: #fff;
-}
-
-/* ── Actions ── */
 .actions {
   margin-top: 2.5rem;
   display: flex;
@@ -218,7 +147,7 @@
   transform: none;
 }
 
-/* ── Toast feedback ── */
+
 .toast {
   display: flex;
   align-items: center;
@@ -234,56 +163,29 @@
   animation: fadeIn 0.25s ease;
 }
 
+.toastError {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 12px;
+  font-size: 0.82rem;
+  color: #b91c1c;
+  font-weight: 500;
+  animation: fadeIn 0.25s ease;
+}
+
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(4px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ── Specs table ── */
-.specsSection {
-  margin-top: 3.5rem;
-  padding-top: 2.5rem;
-  border-top: 1px solid #eaeaea;
-}
 
-.specsTitle {
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: #8b8b8b;
-  margin: 0 0 1.5rem;
-}
 
-.specsTable {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
 
-.specRow {
-  display: grid;
-  grid-template-columns: 140px 1fr;
-  gap: 1rem;
-  padding: 0.85rem 0;
-  border-bottom: 1px solid #f0f0f0;
-  font-size: 0.85rem;
-  line-height: 1.5;
-}
-
-.specRow:last-child { border-bottom: none; }
-
-.specKey {
-  color: #8b8b8b;
-  font-weight: 400;
-}
-
-.specValue {
-  color: #111;
-  font-weight: 400;
-}
-
-/* ── Loading / Error states ── */
 .stateWrapper {
   display: flex;
   align-items: center;
@@ -294,7 +196,7 @@
   letter-spacing: 0.02em;
 }
 
-/* ── Responsive ── */
+
 @media (max-width: 900px) {
   .layout {
     grid-template-columns: 1fr;
@@ -308,5 +210,4 @@
 @media (max-width: 768px) {
   .container { padding: 2rem 1.25rem 4rem; }
   .back { margin-bottom: 2rem; }
-  .specRow { grid-template-columns: 120px 1fr; }
 }
