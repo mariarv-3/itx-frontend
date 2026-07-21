@@ -1,17 +1,16 @@
 # ITX Mobile Device Store - Frontend Test
 
-A Single Page Application (SPA) for a mobile device store, developed as part of the ITX frontend technical challenge.
+A responsive Single Page Application (SPA) e-commerce for mobile devices, built with React 19 and TypeScript.
 
-The main goal of the implementation is to keep the codebase maintainable and easy to evolve, applying a clear separation between business logic, data access and UI concerns.
+This README documents how to run the project and how the implementation maps to the original Front‑End Test specification.
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Requirements
-
-* Node.js (v18 or higher recommended)
-* npm
+- **Node.js**: v18.x or higher
+- **npm**: v9.x or higher
 
 ### Installation
 
@@ -19,212 +18,192 @@ The main goal of the implementation is to keep the codebase maintainable and eas
 npm install
 ```
 
-### Run the application
+---
+
+## Available Scripts
+
+- `npm start` — Start development server (webpack dev server).
+- `npm run build` — Build production bundle.
+- `npm test` — Run unit tests (Jest).
+- `npm run lint` — Run ESLint against `src/`.
+
+---
+
+## Architecture: Ports & Adapters (Hexagonal)
+
+The project follows a Hexagonal (Ports & Adapters) architecture to keep domain logic decoupled from UI and infra.
+
+```text
+[ Presentation Layer ]  --->  [ Application Layer ]  --->  [ Domain Layer ]
+(React, Custom Hooks)          (Use Cases / Flow)         (Entities & Ports)
+         │                                                        ▲
+         └───────────────────>  [ Infrastructure ]  ──────────────┘
+                              (API Fetch, LocalStorage)
+```
+
+Core features are split by domain (`product`, `cart`) and follow domain/application/infrastructure/presentation layering.
+
+---
+
+## Project Structure (full)
+
+```text
+babel.config.js
+eslint.config.mjs
+package.json
+package-lock.json
+tsconfig.json
+webpack.config.js
+public/
+  └── index.html
+dist/ (build output)
+
+src/
+├── main.tsx
+├── App.tsx
+├── routes.tsx
+├── index.css
+├── global.d.ts
+├── __mocks__/styleMock.js
+├── assets/
+├── shared/
+│   ├── components/
+│   │   ├── EmptyState.module.css
+│   │   ├── EmptyState.tsx
+│   │   ├── Header.module.css
+│   │   ├── Header.tsx
+│   │   ├── Skeleton.module.css
+│   │   └── Skeleton.tsx
+│   ├── config/
+│   │   └── api.ts
+│   ├── context/
+│   │   └── BreadcrumbContext.tsx
+│   └── i18n/
+│       └── en.ts
+|
+├── features/
+│   ├── cart/
+│   │   ├── application/
+│   │   │   └── AddToCartUseCase.ts
+│   │   ├── domain/
+│   │   │   ├── CartItem.ts
+│   │   │   └── CartRepository.ts
+│   │   ├── infrastructure/
+│   │   │   ├── CartApiRepository.ts
+│   │   │   └── CartApiResponse.ts
+│   │   └── presentation/
+│   │       └── CartContext.tsx
+│   |
+│   └── product/
+│       ├── application/
+│       │   ├── GetProductsUseCase.ts
+│       │   └── GetProductUseCase.ts
+│       │   └── __tests__/
+│       │       ├── GetProductsUseCase.test.ts
+│       │       └── GetProductUseCase.test.ts
+│       ├── domain/
+│       │   ├── Product.ts
+│       │   └── ProductRepository.ts
+│       ├── infrastructure/
+│       │   ├── ProductApiRepository.ts
+│       │   ├── ProductApiResponse.ts
+│       │   ├── ProductMapper.ts
+│       │   └── cache/
+│       │       └── LocalStorageCache.ts
+│       │   └── __tests__/
+│       │       ├── ProductMapper.test.ts
+│       │       └── LocalStorageCache.test.ts
+│       └── presentation/
+│           ├── components/
+│           │   ├── ProductItem.module.css
+│           │   ├── ProductItem.tsx
+│           │   ├── SearchBar.module.css
+│           │   ├── SearchBar.tsx
+│           │   └── details/
+│           │       ├── ProductOptions.module.css
+│           │       ├── ProductOptions.tsx
+│           │       ├── ProductSpecs.module.css
+│           │       └── ProductSpecs.tsx
+│           ├── hooks/
+│           │   ├── useProducts.ts
+│           │   └── useProductDetail.ts
+│           └── pages/
+│               ├── list/
+│               │   ├── ProductListPage.module.css
+│               │   └── ProductListPage.tsx
+│               └── details/
+│                   ├── ProductDetailsPage.module.css
+│                   └── ProductDetailsPage.tsx
+```
+
+---
+
+## Technical Stack
+
+- React 19 + TypeScript
+- React Router v7
+- CSS Modules
+- Webpack 5 + Babel
+- Jest + React Testing Library
+
+---
+
+## Key Features
+
+- Client‑side caching (1‑hour TTL) via `LocalStorageCache`.
+- Defensive API parsing with `ProductMapper`.
+- Real‑time search (brand/model).
+- Accessible basics (`aria-` attributes) and responsive layouts.
+
+---
+
+## Testing
+
+Status: 5 test suites · 31 tests (see `src/**/__tests__`)
+
+Unit tests focus on mappers, cache logic and use case coordination.
+
+---
+
+## Conformance to Front‑End Test
+
+- PLP (Product List Page): Implemented — responsive grid, search and navigation to PDP.
+- PDP (Product Details Page): Implemented — image + details/actions columns and back link.
+- Search: Real‑time filtering by brand/model implemented.
+- Cart API: `POST /api/cart` integrated; response `count` persisted and shown in header.
+- Cache: Client cache with 1‑hour TTL implemented.
+- SPA routing: Implemented with React Router.
+- Required scripts: Present in `package.json`.
+
+---
+
+## How to run (local)
 
 ```bash
+npm install
 npm start
+# Open http://localhost:3000
 ```
 
-The application will be available at:
-
-```
-http://localhost:3000
-```
-
-### Run tests
+Run tests:
 
 ```bash
 npm test
 ```
 
-### Production build
+Lint:
 
 ```bash
-npm run build
-```
-
-The production bundle will be generated in the `dist` folder.
-
----
-
-# 🏗️ Architecture
-
-The project follows a feature-based structure inspired by **Hexagonal Architecture (Ports & Adapters)** and **Domain-Driven Design principles**.
-
-The main idea is to keep external dependencies (React, API calls, browser storage) separated from the core application logic.
-
-The codebase is organized into business features:
-
-* `product`
-* `cart`
-
-Each feature contains its own layers:
-
-### `domain/`
-
-Contains the core models and repository contracts.
-
-This layer does not depend on React or infrastructure details.
-
-### `application/`
-
-Contains the use cases that coordinate application flows.
-
-Examples:
-
-* `GetProductsUseCase`
-* `GetProductUseCase`
-* `AddToCartUseCase`
-
-### `infrastructure/`
-
-Contains implementations that interact with external systems:
-
-* API repositories
-* API response mappers
-* LocalStorage cache implementation
-
-### `presentation/`
-
-Contains React-related code:
-
-* Pages
-* Components
-* Custom hooks
-* Contexts
-
-The UI layer consumes use cases without knowing how data is retrieved.
-
----
-
-# 📁 Project Structure
-
-```text
-src/
-├── main.tsx
-├── App.tsx
-├── routes.tsx
-│
-├── features/
-│   ├── cart/
-│   │   ├── application/       # Cart use cases
-│   │   ├── domain/            # Cart models and contracts
-│   │   ├── infrastructure/    # Cart API repository
-│   │   └── presentation/      # Cart context and UI logic
-│   │
-│   └── product/
-│       ├── application/       # Product use cases
-│       ├── domain/            # Product models and interfaces
-│       ├── infrastructure/    # API repositories, mappers and cache
-│       └── presentation/
-│           ├── components/    # Reusable UI components
-│           ├── hooks/         # Presentation hooks
-│           └── pages/
-│               ├── details/   # Product detail page
-│               └── list/      # Product listing page
-│
-└── shared/
-    ├── components/            # Shared UI components
-    └── config/                # Global configuration
+npm run lint
 ```
 
 ---
 
-# 🛠️ Technical Stack
+## Limitations & Next Steps
 
-* **React + TypeScript**
-* **React Router v6**
-* **CSS Modules** for component-scoped styling
-* **Jest** for unit testing
-* **Webpack + Babel** configured manually
+- Add E2E tests (Playwright/Cypress).
+- Add CI (GitHub Actions) to run lint/test/build on PRs.
+- Add screenshots or a `docs/` folder with UX notes.
 
 ---
 
-# ✨ Implemented Features
-
-## Product listing
-
-* Responsive product grid
-* Search by brand and model
-* API integration through repositories
-* Cached API responses
-
-## Product details
-
-* Complete product information display
-* Dynamic specifications section
-* Color selection
-* Storage selection
-* Add to cart functionality
-
-## Cart
-
-* Product addition flow
-* Cart counter in the header
-* API integration when adding products
-
-## API Cache
-
-API responses are stored in `localStorage`.
-
-Cache behaviour:
-
-* Data is stored after successful API requests
-* Cached data is reused for 1 hour
-* Expired entries are automatically ignored and refreshed
-
-## Error handling
-
-API failures and unexpected errors are handled gracefully to avoid breaking the user experience.
-
----
-
-# 🧪 Testing
-
-Unit tests cover the main pieces of application logic:
-
-* API response mappers
-* LocalStorage cache behaviour
-* Use cases
-
-The goal is to verify business behaviour independently from the UI.
-
----
-
-# 💡 Technical Decisions
-
-### Why feature-based architecture?
-
-The application is divided by business capability rather than technical type.
-
-This makes it easier to add new features without creating a large shared folder with unrelated code.
-
-### Why not Redux?
-
-The current application state is limited mainly to the shopping cart.
-
-React Context provides enough functionality without introducing unnecessary complexity.
-
-### Why use repositories?
-
-Repositories isolate API access from the rest of the application.
-
-This allows replacing the data source in the future without changing the UI or business logic.
-
----
-
-# 🔮 Possible Future Improvements
-
-For a production-scale application, some improvements could be considered:
-
-* Add end-to-end testing with Playwright or Cypress
-* Introduce CI/CD checks for tests, linting and builds
-* Add pagination or infinite scrolling for larger catalogues
-* Improve offline capabilities with PWA features
-* Consider a dedicated state management solution if application state grows significantly
-
----
-
-## Final notes
-
-The implementation focuses on keeping responsibilities separated, making the code easier to understand, test and maintain while staying aligned with the requirements of the challenge.
