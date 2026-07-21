@@ -7,7 +7,16 @@ export const dictionary = {
     loading: "Loading products...",
     error: "Error Loading Products",
     noResultsTitle: "No results found",
-    noResultsDesc: (query: string) => `We couldn't find any products matching "${query}". Please try another search.`,
+    noResultsDesc: (query: string) =>
+      `We couldn't find any products matching "${query}". Please try another search.`,
+
+    resultsCount: (count: number) =>
+      `${count} ${count === 1 ? "product" : "products"}`,
+
+    filteredBy: (query: string) =>
+      `Filtered by "${query}"`,
+
+    clearSearch: "Clear search",
   },
   productDetails: {
     back: "Back to all phones",

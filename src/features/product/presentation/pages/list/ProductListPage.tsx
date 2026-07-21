@@ -107,10 +107,10 @@ export function ProductListPage() {
           <div className={styles.searchPanel}>
             <div className={styles.resultsMeta}>
               <span className={styles.resultsCount}>
-                {filteredProducts.length} {filteredProducts.length === 1 ? "producto" : "productos"}
+                {dictionary.productList.resultsCount(filteredProducts.length)}
               </span>
               {searchQuery && (
-                <span className={styles.resultsHint}>Filtrados por “{searchQuery}”</span>
+                <span className={styles.resultsHint}>{dictionary.productList.filteredBy(searchQuery)}</span>
               )}
             </div>
             <div className={styles.searchControls}>
@@ -123,7 +123,7 @@ export function ProductListPage() {
                   type="button"
                   className={styles.clearButton}
                   onClick={() => setSearchQuery("")}
-                  aria-label="Limpiar búsqueda"
+                  aria-label={dictionary.productList.clearSearch}
                 >
                   ✕
                 </button>
