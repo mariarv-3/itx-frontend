@@ -35,7 +35,7 @@ export const Header = () => {
         </nav>
       </div>
 
-      <div className={`${styles.cart} ${isBumping ? styles.cartBumping : ''}`}>
+      <Link to="/cart" className={`${styles.cart} ${isBumping ? styles.cartBumping : ''}`}>
         <div className={styles.cartIcon}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -53,7 +53,7 @@ export const Header = () => {
           </svg>
         </div>
         <span>{count}</span>
-      </div>
+      </Link>
     </header>
   );
 };

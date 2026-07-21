@@ -7,6 +7,7 @@ interface CartContextValue {
   count: number;
   total: number;
   addItem: (product: ProductDetail, colorCode: number, storageCode: number) => void;
+  updateQuantity: (productId: string, colorCode: number, storageCode: number, delta: number) => void;
   removeItem: (productId: string, colorCode: number, storageCode: number) => void;
   clearCart: () => void;
 }
@@ -80,6 +81,28 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     });
   };
 
+  const updateQuantity = (productId: string, colorCode: number, storageCode: number, delta: number) => {
+    setItems((prev) => {
+      const target = prev.find((item) => isSameItem(item, productId, colorCode, storageCode));
+
+      if (!target) {
+        return prev;
+      }
+
+      const nextQuantity = target.quantity + delta;
+
+      if (nextQuantity <= 0) {
+        return prev.filter((item) => !isSameItem(item, productId, colorCode, storageCode));
+      }
+
+      return prev.map((item) =>
+        isSameItem(item, productId, colorCode, storageCode)
+          ? { ...item, quantity: nextQuantity }
+          : item
+      );
+    });
+  };
+
   const removeItem = (productId: string, colorCode: number, storageCode: number) => {
     setItems((prev) => prev.filter((item) => !isSameItem(item, productId, colorCode, storageCode)));
   };
@@ -94,7 +117,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
   );
 
   return (
-    <CartContext.Provider value={{ items, count, total, addItem, removeItem, clearCart }}>
+    <CartContext.Provider value={{ items, count, total, addItem, updateQuantity, removeItem, clearCart }}>
       {children}
     </CartContext.Provider>
   );

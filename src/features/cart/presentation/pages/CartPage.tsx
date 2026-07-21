@@ -1,0 +1,116 @@
+import { Link } from "react-router-dom";
+import { useCart } from "../CartContext";
+import { Header } from "../../../../shared/components/Header";
+import { EmptyState } from "../../../../shared/components/EmptyState";
+import styles from "./CartPage.module.css";
+
+export const CartPage = () => {
+  const { items, total, updateQuantity, removeItem, clearCart } = useCart();
+
+  return (
+    <div className={styles.page}>
+      <Header />
+
+      <div className={styles.container}>
+        <div className={styles.headerRow}>
+          <div>
+            <p className={styles.eyebrow}>Cart</p>
+            <h1 className={styles.title}>Your selection</h1>
+          </div>
+          {items.length > 0 && (
+            <button type="button" className={styles.clearButton} onClick={clearCart}>
+              Clear cart
+            </button>
+          )}
+        </div>
+
+        {items.length === 0 ? (
+          <EmptyState
+            title="Your cart is empty"
+            description="Add a device to get started."
+            action={
+              <Link to="/" className={styles.primaryLink}>
+                Browse phones
+              </Link>
+            }
+          />
+        ) : (
+          <div className={styles.layout}>
+            <div className={styles.list}>
+              {items.map((item) => (
+                <div
+                  key={`${item.product.id}-${item.colorCode}-${item.storageCode}`}
+                  className={styles.card}
+                >
+                  <img src={item.product.imageUrl} alt={item.product.model} className={styles.image} />
+                  <div className={styles.info}>
+                    <div>
+                      <p className={styles.brand}>{item.product.brand}</p>
+                      <Link to={`/product/${item.product.id}`} className={styles.modelLink}>
+                        <h2 className={styles.model}>{item.product.model}</h2>
+                      </Link>
+                    </div>
+                    <div className={styles.meta}>
+                      <span>
+                        {item.product.options.colors.find((color) => color.code === item.colorCode)?.name ?? "Color"}
+                      </span>
+                      <span>
+                        {item.product.options.storages.find((storage) => storage.code === item.storageCode)?.name ?? "Storage"}
+                      </span>
+                    </div>
+                    <div className={styles.footer}>
+                      <div className={styles.quantityControls}>
+                        <button
+                          type="button"
+                          className={styles.quantityButton}
+                          onClick={() => updateQuantity(item.product.id, item.colorCode, item.storageCode, -1)}
+                        >
+                          −
+                        </button>
+                        <span className={styles.quantity}>Qty {item.quantity}</span>
+                        <button
+                          type="button"
+                          className={styles.quantityButton}
+                          onClick={() => updateQuantity(item.product.id, item.colorCode, item.storageCode, 1)}
+                        >
+                          +
+                        </button>
+                      </div>
+                      <button
+                        type="button"
+                        className={styles.removeButton}
+                        onClick={() => removeItem(item.product.id, item.colorCode, item.storageCode)}
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <aside className={styles.summary}>
+              <p className={styles.summaryTitle}>Order summary</p>
+              <div className={styles.summaryRow}>
+                <span>Items</span>
+                <strong>{items.reduce((sum, item) => sum + item.quantity, 0)}</strong>
+              </div>
+              <div className={styles.summaryRow}>
+                <span>Total</span>
+                <strong>
+                  {total.toLocaleString("es-ES", {
+                    style: "currency",
+                    currency: "EUR",
+                  })}
+                </strong>
+              </div>
+              <Link to="/" className={styles.primaryLink}>
+                Continue shopping
+              </Link>
+            </aside>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
