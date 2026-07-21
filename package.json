@@ -11,6 +11,8 @@
     "start": "webpack serve --mode development --open",
     "build": "webpack --mode production",
     "test": "jest",
+    "test:e2e": "cypress run",
+    "cypress:open": "cypress open",
     "lint": "eslint src"
   },
   "dependencies": {
@@ -35,6 +37,7 @@
     "@typescript-eslint/parser": "^8.64.0",
     "babel-loader": "^10.1.1",
     "css-loader": "^7.1.4",
+    "cypress": "^15.18.1",
     "eslint": "^9.39.5",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.1.1",

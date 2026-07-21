@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 
 import { useProductDetail } from "../../hooks/useProductDetail";
 import { useBreadcrumb } from "../../../../../shared/context/BreadcrumbContext";
+import { useDocumentTitle } from "../../../../../shared/hooks/useDocumentTitle";
 
 import { ProductOptions } from "../../components/details/ProductOptions";
 import { ProductSpecs } from "../../components/details/ProductSpecs";
@@ -24,6 +25,7 @@ export const ProductDetailsPage = () => {
   const { addItem } = useCart();
   const { setProductName } = useBreadcrumb();
   const { product, isLoading, error, retryCount, retry } = useProductDetail(id);
+  useDocumentTitle(product?.model ?? null);
 
   useEffect(() => {
     if (product) {

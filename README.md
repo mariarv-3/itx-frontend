@@ -117,6 +117,16 @@ Examples:
 - cache tests
 - component tests for search and product list behavior
 
+**End-to-End Tests (Cypress)**
+A full E2E purchase flow is simulated with Cypress. Make sure the app is running (`npm start`) before executing the tests.
+```bash
+# Run tests headlessly
+npm run test:e2e
+
+# Open Cypress UI for visual debugging
+npm run cypress:open
+```
+
 ---
 
 ## Run locally
