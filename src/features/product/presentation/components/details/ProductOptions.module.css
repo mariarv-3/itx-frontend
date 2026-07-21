@@ -14,7 +14,7 @@
   margin: 0 0 0.75rem;
 }
 
-/* Color swatches */
+
 .colorSwatches {
   display: flex;
   flex-wrap: wrap;
@@ -25,19 +25,21 @@
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  border: 2px solid transparent;
+  border: 1px solid #d1d5db;
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
   outline: none;
 }
 
-.swatch:hover { transform: scale(1.15); }
+.swatch:hover {
+  transform: scale(1.15);
+}
 
 .swatchSelected {
   box-shadow: 0 0 0 2px #fff, 0 0 0 4px #111;
 }
 
-/* Storage chips */
+
 .storageChips {
   display: flex;
   flex-wrap: wrap;
@@ -63,6 +65,12 @@
 }
 
 .chipSelected {
+  background: #111;
+  border-color: #111;
+  color: #fff;
+}
+
+.chipSelected:hover {
   background: #111;
   border-color: #111;
   color: #fff;

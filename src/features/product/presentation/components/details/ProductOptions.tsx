@@ -1,19 +1,7 @@
 import { dictionary } from "../../../../../shared/i18n/en";
 import type { ProductOptions as ProductOptionsType } from "../../../domain/Product";
+import { getColorValue } from "../../utils/getColorValue";
 import styles from "./ProductOptions.module.css";
-
-const COLOR_MAP: Record<number, string> = {
-  1: "#1a1a1a",
-  2: "#ffffff",
-  3: "#c0392b",
-  4: "#2980b9",
-  5: "#27ae60",
-  6: "#f39c12",
-  7: "#8e44ad",
-  8: "#95a5a6",
-  9: "#e67e22",
-  10: "#16a085",
-};
 
 interface ProductOptionsProps {
   options: ProductOptionsType;
@@ -34,7 +22,10 @@ export const ProductOptions = ({
     <div className={styles.options}>
       {options.colors.length > 0 && (
         <div>
-          <p className={styles.optionLabel}>{dictionary.productDetails.colorLabel}</p>
+          <p className={styles.optionLabel}>
+            {dictionary.productDetails.colorLabel}
+          </p>
+
           <div className={styles.colorSwatches}>
             {options.colors.map((color) => (
               <button
@@ -42,7 +33,9 @@ export const ProductOptions = ({
                 className={`${styles.swatch} ${
                   currentColor === color.code ? styles.swatchSelected : ""
                 }`}
-                style={{ backgroundColor: COLOR_MAP[color.code] ?? "#cccccc" }}
+                style={{
+                  backgroundColor: getColorValue(color.name),
+                }}
                 onClick={() => onColorSelect(color.code)}
                 aria-label={color.name}
                 aria-pressed={currentColor === color.code}
@@ -54,7 +47,10 @@ export const ProductOptions = ({
 
       {options.storages.length > 0 && (
         <div>
-          <p className={styles.optionLabel}>{dictionary.productDetails.storageLabel}</p>
+          <p className={styles.optionLabel}>
+            {dictionary.productDetails.storageLabel}
+          </p>
+
           <div className={styles.storageChips}>
             {options.storages.map((storage) => (
               <button
