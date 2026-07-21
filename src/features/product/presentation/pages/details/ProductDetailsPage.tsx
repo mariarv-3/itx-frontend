@@ -12,7 +12,7 @@ import { useCart } from "../../../../../features/cart/presentation/CartContext";
 import { CartApiRepository } from "../../../../../features/cart/infrastructure/CartApiRepository";
 import { AddToCartUseCase } from "../../../../../features/cart/application/AddToCartUseCase";
 
-import { Header } from "../../../../../shared/components/Header";
+
 import { Skeleton } from "../../../../../shared/components/Skeleton";
 import { EmptyState } from "../../../../../shared/components/EmptyState";
 import { dictionary } from "../../../../../shared/i18n/en";
@@ -76,8 +76,6 @@ export const ProductDetailsPage = () => {
 
   return (
     <div className={styles.page}>
-      <Header />
-
       <div className={styles.container}>
         <Link to="/" className={styles.back}>
           <span className={styles.backArrow}>←</span>

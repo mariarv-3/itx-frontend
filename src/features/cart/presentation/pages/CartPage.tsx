@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { useCart } from "../CartContext";
-import { Header } from "../../../../shared/components/Header";
 import { EmptyState } from "../../../../shared/components/EmptyState";
 import { dictionary } from "../../../../shared/i18n/en";
 import styles from "./CartPage.module.css";
@@ -10,8 +9,6 @@ export const CartPage = () => {
 
   return (
     <div className={styles.page}>
-      <Header />
-
       <div className={styles.container}>
         <div className={styles.headerRow}>
           <div>

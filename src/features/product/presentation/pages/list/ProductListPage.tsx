@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { useProducts } from "../../hooks/useProducts";
-import { Header } from "../../../../../shared/components/Header";
+
 import { EmptyState } from "../../../../../shared/components/EmptyState";
 import { dictionary } from "../../../../../shared/i18n/en";
 import type { Product } from "../../../domain/Product";
@@ -43,38 +43,30 @@ export function ProductListPage() {
 
   if (isLoading) {
     return (
-      <>
-        <Header />
-        <main className={styles.container}>
-          <ProductListSkeleton />
-        </main>
-      </>
+      <main className={styles.container}>
+        <ProductListSkeleton />
+      </main>
     );
   }
 
   if (error) {
     return (
-      <>
-        <Header />
-        <main className={styles.container}>
-          <EmptyState
-            title={dictionary.productList.error}
-            description={error}
-            action={retryCount > 0 ? (
-              <button type="button" onClick={retry} className={styles.retryButton}>
-                {dictionary.productDetails.retry}
-              </button>
-            ) : undefined}
-          />
-        </main>
-      </>
+      <main className={styles.container}>
+        <EmptyState
+          title={dictionary.productList.error}
+          description={error}
+          action={retryCount > 0 ? (
+            <button type="button" onClick={retry} className={styles.retryButton}>
+              {dictionary.productDetails.retry}
+            </button>
+          ) : undefined}
+        />
+      </main>
     );
   }
 
   return (
-    <>
-      <Header />
-      <main className={styles.container}>
+    <main className={styles.container}>
         <ProductSearchPanel
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
@@ -85,6 +77,5 @@ export function ProductListPage() {
           searchQuery={searchQuery}
         />
       </main>
-    </>
   );
 }
