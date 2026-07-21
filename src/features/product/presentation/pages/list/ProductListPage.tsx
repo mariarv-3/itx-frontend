@@ -6,9 +6,34 @@ import { Header } from "../../../../../shared/components/Header";
 import { Skeleton } from "../../../../../shared/components/Skeleton";
 import { EmptyState } from "../../../../../shared/components/EmptyState";
 import { dictionary } from "../../../../../shared/i18n/en";
+import type { ProductDetail } from "../../domain/Product";
 import styles from "./ProductListPage.module.css";
 
 const SKELETON_COUNT = 8;
+
+const normalizeQuery = (value: string) =>
+  value
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+
+export const filterProductsByQuery = (products: ProductDetail[], query: string) => {
+  const normalizedQuery = normalizeQuery(query);
+
+  if (!normalizedQuery) {
+    return products;
+  }
+
+  const terms = normalizedQuery.split(/\s+/).filter(Boolean);
+
+  return products.filter((product) => {
+    const searchableText = normalizeQuery(`${product.brand} ${product.model}`);
+
+    return terms.every((term) => searchableText.includes(term));
+  });
+};
 
 export function ProductListPage() {
   const { products, isLoading, error, retryCount, retry } = useProducts();
@@ -16,17 +41,7 @@ export function ProductListPage() {
   const [searchQuery, setSearchQuery] = useState("");
 
   const filteredProducts = useMemo(() => {
-    const query = searchQuery.trim().toLowerCase();
-
-    if (!query) {
-      return products;
-    }
-
-    return products.filter(
-      (product) =>
-        product.brand.toLowerCase().includes(query) ||
-        product.model.toLowerCase().includes(query)
-    );
+    return filterProductsByQuery(products, searchQuery);
   }, [products, searchQuery]);
 
   if (isLoading) {
@@ -69,17 +84,15 @@ export function ProductListPage() {
         <Header />
 
         <main className={styles.container}>
-          <div>
-            <EmptyState
-              title={dictionary.productList.error}
-              description={error}
-            />
-            {retryCount > 0 && (
-              <button type="button" onClick={retry} style={{ marginTop: "1rem" }}>
+          <EmptyState
+            title={dictionary.productList.error}
+            description={error}
+            action={retryCount > 0 ? (
+              <button type="button" onClick={retry} className={styles.retryButton}>
                 {dictionary.productDetails.retry}
               </button>
-            )}
-          </div>
+            ) : undefined}
+          />
         </main>
       </>
     );
@@ -91,10 +104,32 @@ export function ProductListPage() {
 
       <main className={styles.container}>
         <div className={styles.topBar}>
-          <SearchBar
-            value={searchQuery}
-            onChange={setSearchQuery}
-          />
+          <div className={styles.searchPanel}>
+            <div className={styles.resultsMeta}>
+              <span className={styles.resultsCount}>
+                {filteredProducts.length} {filteredProducts.length === 1 ? "producto" : "productos"}
+              </span>
+              {searchQuery && (
+                <span className={styles.resultsHint}>Filtrados por “{searchQuery}”</span>
+              )}
+            </div>
+            <div className={styles.searchControls}>
+              <SearchBar
+                value={searchQuery}
+                onChange={setSearchQuery}
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  className={styles.clearButton}
+                  onClick={() => setSearchQuery("")}
+                  aria-label="Limpiar búsqueda"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
+          </div>
         </div>
 
         <div className={styles.grid}>

@@ -4,9 +4,10 @@ interface EmptyStateProps {
   title: string;
   description: string;
   icon?: React.ReactNode;
+  action?: React.ReactNode;
 }
 
-export const EmptyState = ({ title, description, icon }: EmptyStateProps) => {
+export const EmptyState = ({ title, description, icon, action }: EmptyStateProps) => {
   return (
     <div className={styles.emptyState}>
       {icon ? (
@@ -33,6 +34,7 @@ export const EmptyState = ({ title, description, icon }: EmptyStateProps) => {
       )}
       <h3 className={styles.title}>{title}</h3>
       <p className={styles.description}>{description}</p>
+      {action ? <div className={styles.actions}>{action}</div> : null}
     </div>
   );
 };

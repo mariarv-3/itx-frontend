@@ -101,14 +101,15 @@ export const ProductDetailsPage = () => {
         )}
 
         {error && (
-          <div>
-            <EmptyState title={dictionary.productDetails.errorLoad} description={error} />
-            {retryCount > 0 && (
-              <button type="button" onClick={retry} style={{ marginTop: "1rem" }}>
+          <EmptyState
+            title={dictionary.productDetails.errorLoad}
+            description={error}
+            action={retryCount > 0 ? (
+              <button type="button" onClick={retry} className={styles.retryButton}>
                 {dictionary.productDetails.retry}
               </button>
-            )}
-          </div>
+            ) : undefined}
+          />
         )}
 
         {product && (
