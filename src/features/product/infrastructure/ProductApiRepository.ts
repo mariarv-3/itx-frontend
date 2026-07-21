@@ -8,6 +8,7 @@ import { mapProduct, mapProductDetail } from "./ProductMapper";
 export class ProductApiRepository implements ProductRepository {
   private readonly pendingRequests = new Map<string, Promise<unknown>>();
   private readonly requestTimeoutMs = 8000;
+  private readonly maxRetries = 2;
 
   constructor(
     private readonly cache: LocalStorageCache
@@ -60,38 +61,56 @@ export class ProductApiRepository implements ProductRepository {
   }
 
   private async request<T>(url: string): Promise<T> {
-    const controller = new AbortController();
+    let attempt = 0;
 
-    const timeoutId = globalThis.setTimeout(() => {
-      controller.abort();
-    }, this.requestTimeoutMs);
+    while (attempt <= this.maxRetries) {
+      const controller = new AbortController();
+      const timeoutId = globalThis.setTimeout(() => {
+        controller.abort();
+      }, this.requestTimeoutMs);
 
-    try {
-      const response = await fetch(url, {
-        signal: controller.signal,
-      });
+      try {
+        const response = await fetch(url, {
+          signal: controller.signal,
+        });
 
-      if (!response.ok) {
-        throw new Error(
-          `Request failed (${response.status})`
-        );
+        if (!response.ok) {
+          throw new Error(
+            `Request failed (${response.status})`
+          );
+        }
+
+        return response.json() as Promise<T>;
+      } catch (error) {
+        globalThis.clearTimeout(timeoutId);
+
+        if (this.isAbortError(error)) {
+          if (attempt < this.maxRetries) {
+            attempt += 1;
+            continue;
+          }
+
+          throw new Error("Request timed out");
+        }
+
+        if (attempt < this.maxRetries) {
+          attempt += 1;
+          continue;
+        }
+
+        throw error;
       }
-
-      return response.json() as Promise<T>;
-
-    } catch (error) {
-      if (
-        error instanceof DOMException &&
-        error.name === "AbortError"
-      ) {
-        throw new Error("Request timed out");
-      }
-
-      throw error;
-
-    } finally {
-      globalThis.clearTimeout(timeoutId);
     }
+
+    throw new Error("Request timed out");
+  }
+
+  private isAbortError(error: unknown): boolean {
+    if (error instanceof Error) {
+      return error.name === "AbortError";
+    }
+
+    return false;
   }
 
   private dedupe<T>(key: string, fetcher: () => Promise<T>): Promise<T> {

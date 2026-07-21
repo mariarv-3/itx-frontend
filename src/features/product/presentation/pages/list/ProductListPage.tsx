@@ -11,7 +11,7 @@ import styles from "./ProductListPage.module.css";
 const SKELETON_COUNT = 8;
 
 export function ProductListPage() {
-  const { products, isLoading, error } = useProducts();
+  const { products, isLoading, error, retryCount, retry } = useProducts();
 
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -69,10 +69,17 @@ export function ProductListPage() {
         <Header />
 
         <main className={styles.container}>
-          <EmptyState
-            title={dictionary.productList.error}
-            description={error}
-          />
+          <div>
+            <EmptyState
+              title={dictionary.productList.error}
+              description={error}
+            />
+            {retryCount > 0 && (
+              <button type="button" onClick={retry} style={{ marginTop: "1rem" }}>
+                {dictionary.productDetails.retry}
+              </button>
+            )}
+          </div>
         </main>
       </>
     );

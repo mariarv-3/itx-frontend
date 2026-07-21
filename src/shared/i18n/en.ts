@@ -19,7 +19,8 @@ export const dictionary = {
     storageLabel: "Storage",
     priceUnavailable: "Price unavailable",
     loading: "Loading…",
-    errorLoad: "Error Loading Product Details"
+    errorLoad: "Error Loading Product Details",
+    retry: "Try again"
   },
   productItem: {
     priceUnavailable: "Price unavailable"

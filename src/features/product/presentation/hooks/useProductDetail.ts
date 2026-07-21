@@ -8,6 +8,8 @@ export function useProductDetail(id: string | undefined) {
   const [product, setProduct] = useState<ProductDetail | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [retryCount, setRetryCount] = useState(0);
+  const [reloadKey, setReloadKey] = useState(0);
 
   const getProductUseCase = useMemo(
     () =>
@@ -20,7 +22,11 @@ export function useProductDetail(id: string | undefined) {
   );
 
   useEffect(() => {
+    let isActive = true;
+
     if (!id) {
+      setProduct(null);
+      setError(null);
       setIsLoading(false);
       return;
     }
@@ -32,27 +38,46 @@ export function useProductDetail(id: string | undefined) {
 
         const data = await getProductUseCase.execute(id);
 
-        setProduct(data);
+        if (!isActive) {
+          return;
+        }
 
+        setProduct(data);
       } catch (err) {
+        if (!isActive) {
+          return;
+        }
+
+        setRetryCount((current) => current + 1);
         setError(
           err instanceof Error
             ? err.message
             : "Unknown error"
         );
-
       } finally {
-        setIsLoading(false);
+        if (isActive) {
+          setIsLoading(false);
+        }
       }
     };
 
-    loadProduct();
+    void loadProduct();
 
-  }, [id, getProductUseCase]);
+    return () => {
+      isActive = false;
+    };
+  }, [id, getProductUseCase, reloadKey]);
+
+  const retry = () => {
+    setRetryCount((current) => current + 1);
+    setReloadKey((current) => current + 1);
+  };
 
   return {
     product,
     isLoading,
     error,
+    retryCount,
+    retry,
   };
 }

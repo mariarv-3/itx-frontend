@@ -23,7 +23,7 @@ export const ProductDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
   const { addItem } = useCart();
   const { setProductName } = useBreadcrumb();
-  const { product, isLoading, error } = useProductDetail(id);
+  const { product, isLoading, error, retryCount, retry } = useProductDetail(id);
 
   useEffect(() => {
     if (product) {
@@ -100,7 +100,16 @@ export const ProductDetailsPage = () => {
           </div>
         )}
 
-        {error && <EmptyState title={dictionary.productDetails.errorLoad} description={error} />}
+        {error && (
+          <div>
+            <EmptyState title={dictionary.productDetails.errorLoad} description={error} />
+            {retryCount > 0 && (
+              <button type="button" onClick={retry} style={{ marginTop: "1rem" }}>
+                {dictionary.productDetails.retry}
+              </button>
+            )}
+          </div>
+        )}
 
         {product && (
           <div className={styles.layout}>
