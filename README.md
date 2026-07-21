@@ -139,6 +139,27 @@ npm run lint
 
 ---
 
+## Technical Decisions & Trade-offs
+
+During the development of this technical test, several architectural and technical decisions were made to balance clean code practices with pragmatism:
+
+- **Architecture (Feature-Sliced Design):** The application is structured around domain features (`product`, `cart`). Within each feature, responsibilities are strictly separated into *Domain*, *Application*, *Infrastructure*, and *Presentation* layers. This ensures that UI components are decoupled from business logic and API contracts, making the app highly scalable and testable.
+- **State Management:** The global state (e.g., shopping cart) is managed using React Context.
+- **Styling (CSS Modules):** CSS Modules were chosen over CSS-in-JS (like Styled Components) or utility-first frameworks (like Tailwind) to avoid extra dependencies, ensure local scope without class name collisions, and demonstrate proficiency with pure CSS.
+- **Custom Build Setup (Webpack & Babel):** The project is intentionally built from scratch using Webpack and Babel.
+- **Zero-Dependency Approach:** The core logic is built using pure React (and `react-router-dom` for navigation) without relying on external libraries for fetching, data formatting, or complex UI components.
+- **Testing Strategy:** Jest and React Testing Library were chosen to focus on testing behavior from the user's perspective rather than implementation details, ensuring the UI behaves correctly under different states.
+
+---
+
+## Assumptions
+
+Due to the open nature of the requirements, the following assumptions were made:
+- **Cart Persistence:** Since there are no specific API endpoints to manage the user's cart on the server, the cart state is persisted exclusively on the client side using `localStorage`.
+- **Search Filtering:** The search functionality filters the data loaded in memory. It is assumed that the initial product list endpoint returns the entire catalog needed for a comprehensive client-side search across brand and model.
+
+---
+
 ## Notes and next improvements
 
 A few sensible follow-ups that fit this project well:

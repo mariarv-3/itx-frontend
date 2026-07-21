@@ -167,6 +167,8 @@
   background: var(--surface);
   box-shadow: var(--shadow-sm);
   height: fit-content;
+  position: sticky;
+  top: 6rem;
 }
 
 .summaryTitle {
