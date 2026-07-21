@@ -1,5 +1,5 @@
 import type { Product, ProductDetail } from "../domain/Product";
-import type {ProductApiResponse, ProductDetailApiResponse } from "./ProductApiResponse";
+import type { ProductApiResponse, ProductDetailApiResponse } from "./ProductApiResponse";
 
 
 function normalizeValue(value?: string | string[] | null): string | null {
@@ -8,12 +8,22 @@ function normalizeValue(value?: string | string[] | null): string | null {
   }
 
   if (Array.isArray(value)) {
-    const normalized = value.filter(Boolean).join(", ");
+    const normalized = value
+      .map(item => item.trim())
+      .filter(Boolean)
+      .join(", ");
 
     return normalized || null;
   }
 
   return value.trim() || null;
+}
+
+
+function normalizeArray(value?: string[] | null): string[] {
+  return value
+    ?.map(item => item.trim())
+    .filter(Boolean) ?? [];
 }
 
 
@@ -27,6 +37,21 @@ function normalizePrice(price?: string | null): number | null {
   return Number.isNaN(value)
     ? null
     : value;
+}
+
+
+function normalizeOptions(
+  options?: ProductDetailApiResponse["options"]
+) {
+  return {
+    colors: options?.colors?.filter(
+      color => color.name.trim()
+    ) ?? [],
+
+    storages: options?.storages?.filter(
+      storage => storage.name.trim()
+    ) ?? [],
+  };
 }
 
 
@@ -73,7 +98,7 @@ export function mapProductDetail(product: ProductDetailApiResponse): ProductDeta
 
     // Memory
     externalMemory: normalizeValue(product.externalMemory),
-    internalMemory: product.internalMemory ?? [],
+    internalMemory: normalizeArray(product.internalMemory),
     ram: normalizeValue(product.ram),
 
     // Camera
@@ -95,12 +120,9 @@ export function mapProductDetail(product: ProductDetailApiResponse): ProductDeta
 
     // Features
     sensors: normalizeValue(product.sensors),
-    colors: product.colors ?? [],
+    colors: normalizeArray(product.colors),
 
     // Purchase options
-    options: {
-      colors: product.options?.colors ?? [],
-      storages: product.options?.storages ?? [],
-    },
+    options: normalizeOptions(product.options),
   };
 }
