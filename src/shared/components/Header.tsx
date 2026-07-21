@@ -2,6 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useCart } from '../../features/cart/presentation/CartContext';
 import { useBreadcrumb } from '../context/BreadcrumbContext';
 import { useEffect, useState } from 'react';
+import { dictionary } from '../i18n/en';
 import styles from './Header.module.css';
 
 export const Header = () => {
@@ -22,10 +23,10 @@ export const Header = () => {
     <header className={styles.header}>
       <div>
         <Link to="/" className={styles.logo}>
-          ITX Store
+          {dictionary.header.title}
         </Link>
         <nav className={styles.breadcrumbs}>
-          <Link to="/">Home</Link>
+          <Link to="/">{dictionary.header.home}</Link>
           {location.pathname.startsWith('/product/') && productName && (
             <span>
               {' / '}

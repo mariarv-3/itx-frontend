@@ -6,7 +6,7 @@ import { Header } from "../../../../../shared/components/Header";
 import { Skeleton } from "../../../../../shared/components/Skeleton";
 import { EmptyState } from "../../../../../shared/components/EmptyState";
 import { dictionary } from "../../../../../shared/i18n/en";
-import type { ProductDetail } from "../../domain/Product";
+import type { Product } from "../../../domain/Product";
 import styles from "./ProductListPage.module.css";
 
 const SKELETON_COUNT = 8;
@@ -19,7 +19,7 @@ const normalizeQuery = (value: string) =>
     .replace(/[^a-z0-9]+/g, " ")
     .trim();
 
-export const filterProductsByQuery = (products: ProductDetail[], query: string) => {
+export const filterProductsByQuery = (products: Product[], query: string) => {
   const normalizedQuery = normalizeQuery(query);
 
   if (!normalizedQuery) {
