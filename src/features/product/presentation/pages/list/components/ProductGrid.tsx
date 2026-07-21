@@ -13,10 +13,11 @@ export const ProductGrid = ({ products, searchQuery }: ProductGridProps) => {
   return (
     <div className={styles.grid}>
       {products.length > 0 ? (
-        products.map((product) => (
+        products.map((product, index) => (
           <ProductItem
             key={product.id}
             product={product}
+            isPriority={index < 12}
           />
         ))
       ) : (

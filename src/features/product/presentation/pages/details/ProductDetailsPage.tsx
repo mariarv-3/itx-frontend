@@ -123,6 +123,7 @@ export const ProductDetailsPage = () => {
                   alt={`${product.brand} ${product.model}`}
                   className={styles.image}
                   style={{ viewTransitionName: `product-image-${product.id}` }}
+                  fetchPriority="high"
                 />
               </div>
             </div>

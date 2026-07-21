@@ -102,6 +102,8 @@ src/
 - Robust repository layer with timeout/abort handling and retry support
 - Improved empty/error/loading states and polished UX feedback
 - Client-side cache for product data with TTL-based invalidation
+- React Error Boundary at the root level to prevent app crashes and display fallback UI
+- Native `loading="lazy"` on product images to optimize performance
 
 ---
 
@@ -165,9 +167,14 @@ Due to the open nature of the requirements, the following assumptions were made:
 A few sensible follow-ups that fit this project well:
 - Add pagination or infinite scroll if the catalog grows beyond the current demo size.
 - Introduce lazy loading for product images and route-level splitting if performance becomes a concern.
+- **Image Optimization:** Integrate an Image CDN (like Cloudinary or Imgix) or request backend support to serve WebP/AVIF formats and properly sized images (e.g., thumbnails for the grid), which will drastically improve LCP and overall download times.
 - Continue refining the visual system with more shared tokens and reusable UI patterns.
 - Improve accessibility gradually with better keyboard support and contrast checks.
 - Add a bit more polish around loading and cart feedback to make the experience feel more complete.
 
 ---
+
+## Git Strategy & Versioning
+- **Trunk-Based Development:** Given the scope and timeline of this technical test, a Trunk-Based approach was chosen, committing directly to `main` to maintain a fast and continuous iteration cycle.
+- **Release Tagging:** The final version submitted for evaluation is marked with the `v1.0.0` tag.
 

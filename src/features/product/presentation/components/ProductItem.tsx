@@ -5,9 +5,10 @@ import styles from './ProductItem.module.css';
 
 interface ProductItemProps {
   product: Product;
+  isPriority?: boolean;
 }
 
-export const ProductItem = ({ product }: ProductItemProps) => (
+export const ProductItem = ({ product, isPriority = false }: ProductItemProps) => (
   <Link
     to={`/product/${product.id}`}
     className={styles.card}
@@ -21,7 +22,8 @@ export const ProductItem = ({ product }: ProductItemProps) => (
         style={{
           viewTransitionName: `product-image-${product.id}`,
         }}
-        loading="lazy"
+        loading={isPriority ? undefined : "lazy"}
+        fetchPriority={isPriority ? "high" : "auto"}
       />
     </div>
 
