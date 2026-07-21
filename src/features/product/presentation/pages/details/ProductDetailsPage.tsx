@@ -37,6 +37,7 @@ export const ProductDetailsPage = () => {
 
   const [added, setAdded] = useState(false);
   const [cartError, setCartError] = useState<string | null>(null);
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
 
   const currentColor = selectedColor !== null
     ? selectedColor
@@ -52,21 +53,22 @@ export const ProductDetailsPage = () => {
     currentStorage !== null;
 
   const handleAddToCart = async () => {
-    if (!product || !canAddToCart) return;
+    if (!product || !canAddToCart || isAddingToCart) return;
 
     try {
+      setIsAddingToCart(true);
       setCartError(null);
 
-      // API call first
       await addToCartUseCase.execute(product.id, currentColor, currentStorage);
 
-      // Update local state context if successful
       addItem(product, currentColor, currentStorage);
 
       setAdded(true);
       setTimeout(() => setAdded(false), 2500);
     } catch (err) {
       setCartError(err instanceof Error ? err.message : dictionary.productDetails.errorAddCart);
+    } finally {
+      setIsAddingToCart(false);
     }
   };
 
@@ -153,7 +155,7 @@ export const ProductDetailsPage = () => {
                 <button
                   className={styles.btnPrimary}
                   onClick={handleAddToCart}
-                  disabled={!canAddToCart}
+                  disabled={!canAddToCart || isAddingToCart}
                 >
                   {dictionary.productDetails.addToCart}
                 </button>
