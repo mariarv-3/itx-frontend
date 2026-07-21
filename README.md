@@ -1,18 +1,16 @@
 # ITX Mobile Device Store - Frontend Test
 
-A responsive Single Page Application (SPA) e-commerce for mobile devices, built with React 19 and TypeScript.
-
-This README documents how to run the project and how the implementation maps to the original Front‑End Test specification.
+A responsive SPA for browsing mobile devices, built with React 19, TypeScript and a feature-oriented architecture.
 
 ---
 
-## Quick Start
+## Quick start
 
 ### Requirements
-- **Node.js**: v18.x or higher
-- **npm**: v9.x or higher
+- Node.js 18+
+- npm 9+
 
-### Installation
+### Install dependencies
 
 ```bash
 npm install
@@ -20,164 +18,106 @@ npm install
 
 ---
 
-## Available Scripts
+## Available scripts
 
-- `npm start` — Start development server (webpack dev server).
-- `npm run build` — Build production bundle.
-- `npm test` — Run unit tests (Jest).
-- `npm run lint` — Run ESLint against `src/`.
+- `npm start` — starts the webpack dev server.
+- `npm run build` — builds the production bundle.
+- `npm test` — runs the Jest test suite.
+- `npm run lint` — runs ESLint over the source tree.
 
 ---
 
-## Architecture: Ports & Adapters (Hexagonal)
+## Architecture
 
-The project follows a Hexagonal (Ports & Adapters) architecture to keep domain logic decoupled from UI and infra.
+The app follows a layered, feature-based structure with clear separation between domain, application, infrastructure and presentation concerns.
 
 ```text
-[ Presentation Layer ]  --->  [ Application Layer ]  --->  [ Domain Layer ]
-(React, Custom Hooks)          (Use Cases / Flow)         (Entities & Ports)
-         │                                                        ▲
-         └───────────────────>  [ Infrastructure ]  ──────────────┘
-                              (API Fetch, LocalStorage)
+Presentation
+  └─ React components, hooks, pages, styles
+Application
+  └─ use cases and orchestration logic
+Domain
+  └─ entities, repositories and core business rules
+Infrastructure
+  └─ API repositories, mappers, cache and local persistence
 ```
 
-Core features are split by domain (`product`, `cart`) and follow domain/application/infrastructure/presentation layering.
+Core features are organized under `src/features/product` and `src/features/cart`.
 
 ---
 
-## Project Structure (full)
+## Project structure
+
+A practical overview of the main folders:
 
 ```text
-babel.config.js
-eslint.config.mjs
-package.json
-package-lock.json
-tsconfig.json
-webpack.config.js
-public/
-  └── index.html
-dist/ (build output)
-
 src/
-├── main.tsx
-├── App.tsx
-├── routes.tsx
-├── index.css
-├── global.d.ts
-├── __mocks__/styleMock.js
-├── assets/
-├── shared/
-│   ├── components/
-│   │   ├── EmptyState.module.css
-│   │   ├── EmptyState.tsx
-│   │   ├── Header.module.css
-│   │   ├── Header.tsx
-│   │   ├── Skeleton.module.css
-│   │   └── Skeleton.tsx
-│   ├── config/
-│   │   └── api.ts
-│   ├── context/
-│   │   └── BreadcrumbContext.tsx
-│   └── i18n/
-│       └── en.ts
-|
+├── App.tsx                # root app shell and route setup
+├── index.css              # global theme tokens and base styles
+├── main.tsx               # app bootstrap
+├── routes.tsx             # route definitions
 ├── features/
-│   ├── cart/
+│   ├── cart/              # cart domain, use case, API integration and context
 │   │   ├── application/
-│   │   │   └── AddToCartUseCase.ts
 │   │   ├── domain/
-│   │   │   ├── CartItem.ts
-│   │   │   └── CartRepository.ts
 │   │   ├── infrastructure/
-│   │   │   ├── CartApiRepository.ts
-│   │   │   └── CartApiResponse.ts
 │   │   └── presentation/
-│   │       └── CartContext.tsx
-│   |
-│   └── product/
+│   └── product/           # product listing/details flow
 │       ├── application/
-│       │   ├── GetProductsUseCase.ts
-│       │   └── GetProductUseCase.ts
-│       │   └── __tests__/
-│       │       ├── GetProductsUseCase.test.ts
-│       │       └── GetProductUseCase.test.ts
 │       ├── domain/
-│       │   ├── Product.ts
-│       │   └── ProductRepository.ts
 │       ├── infrastructure/
-│       │   ├── ProductApiRepository.ts
-│       │   ├── ProductApiResponse.ts
-│       │   ├── ProductMapper.ts
-│       │   └── cache/
-│       │       └── LocalStorageCache.ts
+│       │   ├── cache/
 │       │   └── __tests__/
-│       │       ├── ProductMapper.test.ts
-│       │       └── LocalStorageCache.test.ts
 │       └── presentation/
 │           ├── components/
-│           │   ├── ProductItem.module.css
-│           │   ├── ProductItem.tsx
-│           │   ├── SearchBar.module.css
-│           │   ├── SearchBar.tsx
-│           │   └── details/
-│           │       ├── ProductOptions.module.css
-│           │       ├── ProductOptions.tsx
-│           │       ├── ProductSpecs.module.css
-│           │       └── ProductSpecs.tsx
 │           ├── hooks/
-│           │   ├── useProducts.ts
-│           │   └── useProductDetail.ts
-│           └── pages/
-│               ├── list/
-│               │   ├── ProductListPage.module.css
-│               │   └── ProductListPage.tsx
-│               └── details/
-│                   ├── ProductDetailsPage.module.css
-│                   └── ProductDetailsPage.tsx
+│           ├── pages/
+│           └── utils/
+├── shared/                # shared UI, config, context and i18n
+│   ├── components/
+│   ├── config/
+│   ├── context/
+│   └── i18n/
 ```
+
 
 ---
 
-## Technical Stack
+## Technical stack
 
 - React 19 + TypeScript
-- React Router v7
+- React Router 7
 - CSS Modules
 - Webpack 5 + Babel
 - Jest + React Testing Library
 
 ---
 
-## Key Features
+## What is implemented
 
-- Client‑side caching (1‑hour TTL) via `LocalStorageCache`.
-- Defensive API parsing with `ProductMapper`.
-- Real‑time search (brand/model).
-- Accessible basics (`aria-` attributes) and responsive layouts.
+- Product list page with responsive grid and rich card UI
+- Product detail page with options, specs and add-to-cart flow
+- Search with normalized multi-term matching across brand and model
+- Cart state persisted in local storage so it survives reloads
+- Robust repository layer with timeout/abort handling and retry support
+- Improved empty/error/loading states and polished UX feedback
+- Client-side cache for product data with TTL-based invalidation
 
 ---
 
 ## Testing
 
-Status: 5 test suites · 31 tests (see `src/**/__tests__`)
+Current status: 8 test suites and 30+ tests covering use cases, repository logic, mapping, UI behavior and search filtering.
 
-Unit tests focus on mappers, cache logic and use case coordination.
-
----
-
-## Conformance to Front‑End Test
-
-- PLP (Product List Page): Implemented — responsive grid, search and navigation to PDP.
-- PDP (Product Details Page): Implemented — image + details/actions columns and back link.
-- Search: Real‑time filtering by brand/model implemented.
-- Cart API: `POST /api/cart` integrated; response `count` persisted and shown in header.
-- Cache: Client cache with 1‑hour TTL implemented.
-- SPA routing: Implemented with React Router.
-- Required scripts: Present in `package.json`.
+Examples:
+- use case tests
+- API repository and mapper tests
+- cache tests
+- component tests for search and product list behavior
 
 ---
 
-## How to run (local)
+## Run locally
 
 ```bash
 npm install
@@ -199,11 +139,14 @@ npm run lint
 
 ---
 
-## Limitations & Next Steps
+## Notes and next improvements
 
-- Add E2E tests (Playwright/Cypress).
-- Add CI (GitHub Actions) to run lint/test/build on PRs.
-- Add screenshots or a `docs/` folder with UX notes.
+A few sensible follow-ups that fit this project well:
+- Add pagination or infinite scroll if the catalog grows beyond the current demo size.
+- Introduce lazy loading for product images and route-level splitting if performance becomes a concern.
+- Continue refining the visual system with more shared tokens and reusable UI patterns.
+- Improve accessibility gradually with better keyboard support and contrast checks.
+- Add a bit more polish around loading and cart feedback to make the experience feel more complete.
 
 ---
 
