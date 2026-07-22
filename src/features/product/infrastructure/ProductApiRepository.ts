@@ -69,29 +69,28 @@ export class ProductApiRepository implements ProductRepository {
     while (attempt <= this.retryCount) {
       const controller = new AbortController();
 
-      const timeoutId = globalThis.setTimeout(() => {
-        controller.abort();
-      }, this.requestTimeoutMs);
-
       try {
-        const response = await fetch(url, {
-          signal: controller.signal,
-        });
+        const response = await this.withTimeout(
+          fetch(url, { signal: controller.signal }),
+          controller,
+          "Request timed out"
+        );
 
         if (!response.ok) {
-          throw new Error(
-            `Request failed (${response.status})`
-          );
+          throw new Error(`Request failed (${response.status})`);
         }
 
-        return await response.json() as T;
+        return await this.withTimeout(
+          response.json() as Promise<T>,
+          controller,
+          "Request timed out during JSON parse"
+        );
       } catch (error) {
         if (this.isAbortError(error)) {
           if (attempt < this.retryCount) {
             attempt += 1;
             continue;
           }
-
           throw new Error("Request timed out");
         }
 
@@ -101,12 +100,35 @@ export class ProductApiRepository implements ProductRepository {
         }
 
         throw error;
-      } finally {
-        globalThis.clearTimeout(timeoutId);
       }
     }
 
     throw new Error("Request failed");
+  }
+
+  private async withTimeout<T>(
+    promise: Promise<T>,
+    controller: AbortController,
+    errorMessage: string
+  ): Promise<T> {
+    let timeoutId: ReturnType<typeof setTimeout> | undefined;
+
+    const timeoutPromise = new Promise<never>((_, reject) => {
+      timeoutId = globalThis.setTimeout(() => {
+        controller.abort();
+        const error = new Error(errorMessage);
+        error.name = "AbortError"; // Simulate native AbortError behavior to trigger the retry loop
+        reject(error);
+      }, this.requestTimeoutMs);
+    });
+
+    try {
+      return await Promise.race([promise, timeoutPromise]);
+    } finally {
+      if (timeoutId !== undefined) {
+        globalThis.clearTimeout(timeoutId);
+      }
+    }
   }
 
   private isRetryableError(error: unknown): boolean {
