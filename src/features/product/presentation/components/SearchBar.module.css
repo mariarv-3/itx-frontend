@@ -6,10 +6,11 @@
 
 .searchInput {
   width: 100%;
-  max-width: 320px;
-  padding: var(--space-4) 1.15rem var(--space-4) var(--space-4);
+  max-width: 100%;
+  height: var(--input-height);
+  padding: 0 1.5rem;
   font: inherit;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   color: var(--text);
   background-color: var(--surface);
   border: 1px solid var(--border);

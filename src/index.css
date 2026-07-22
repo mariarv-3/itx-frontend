@@ -35,6 +35,16 @@
   --space-6: 1.5rem;
   --space-8: 2rem;
   --space-10: 2.5rem;
+  
+  /* Layout & Components */
+  --header-height: 60px;
+  --header-height-mobile: 50px;
+  --input-height: 3.25rem;
+  
+  /* Effects */
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-blur: blur(16px);
+  
   --sans: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
