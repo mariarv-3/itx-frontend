@@ -119,7 +119,7 @@ export class ProductApiRepository implements ProductRepository {
         const error = new Error(errorMessage);
         error.name = "AbortError"; // Simulate native AbortError behavior to trigger the retry loop
         reject(error);
-      }, this.requestTimeoutMs);
+      }, API_TIMEOUT_MS);
     });
 
     try {

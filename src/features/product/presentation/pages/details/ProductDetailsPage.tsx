@@ -16,6 +16,7 @@ import { TOAST_DURATION_MS } from "../../../../../shared/config/constants";
 
 import { Skeleton } from "../../../../../shared/components/Skeleton";
 import { EmptyState } from "../../../../../shared/components/EmptyState";
+import { BackButton } from "../../../../../shared/components/BackButton";
 import { dictionary } from "../../../../../shared/i18n/en";
 import styles from "./ProductDetailsPage.module.css";
 
@@ -93,10 +94,7 @@ export const ProductDetailsPage = () => {
   return (
     <div className={styles.page}>
       <div className={styles.container}>
-        <Link to="/" onClick={handleBack} className={styles.back}>
-          <span className={styles.backArrow} aria-hidden="true">←</span>
-          {dictionary.productDetails.back}
-        </Link>
+        <BackButton to="/" onClick={handleBack} label={dictionary.productDetails.back} />
 
         {isLoading && (
           <div className={styles.layout} aria-busy="true" aria-live="polite">

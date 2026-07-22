@@ -18,6 +18,11 @@
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: #000;
+  transition: opacity 0.2s ease;
+}
+
+.logo:hover {
+  opacity: 0.6;
 }
 
 .breadcrumbs {

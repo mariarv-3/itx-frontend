@@ -23,24 +23,33 @@
   display: grid;
   grid-template-columns: 140px 1fr;
   gap: 1rem;
-  padding: 0.85rem 0;
+  padding: 1.25rem 0;
   border-bottom: 1px solid #f0f0f0;
-  font-size: 0.85rem;
-  line-height: 1.5;
+  font-size: 0.9rem;
+  line-height: 1.6;
 }
 
-.specRow:last-child { border-bottom: none; }
+.specRow:last-child {
+  border-bottom: none;
+}
 
 .specKey {
   color: #8b8b8b;
   font-weight: 400;
+  font-size: 0.9rem;
+  text-transform: capitalize;
+  letter-spacing: normal;
 }
 
 .specValue {
   color: #111;
-  font-weight: 400;
+  font-weight: 500;
+  font-size: 0.9rem;
 }
 
 @media (max-width: 768px) {
-  .specRow { grid-template-columns: 120px 1fr; }
+  .specRow {
+    grid-template-columns: 120px 1fr;
+    padding: 1rem 0;
+  }
 }

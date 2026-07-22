@@ -1,0 +1,38 @@
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  margin-left: -1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #8b8b8b;
+  text-decoration: none;
+  margin-bottom: 3rem;
+  border-radius: 999px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  background: transparent;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.back:focus-visible {
+  outline: none;
+}
+
+.back:hover { 
+  color: var(--text);
+  background: var(--surface-muted);
+}
+
+.backArrow {
+  font-size: 1rem;
+  transition: transform 0.2s ease;
+}
+
+.back:hover .backArrow {
+  transform: translateX(-3px);
+}

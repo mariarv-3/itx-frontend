@@ -33,13 +33,21 @@
 
 html {
   background-color: var(--bg);
+  scroll-behavior: smooth;
+}
+
+::selection {
+  background: var(--text);
+  color: var(--surface);
 }
 
 body {
   margin: 0;
+  min-height: 100vh;
   font-family: var(--sans);
   color: var(--text);
   background: linear-gradient(180deg, #f8fafc 0%, #f3f4f6 100%);
+  background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
