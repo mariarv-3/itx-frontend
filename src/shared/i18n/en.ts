@@ -17,7 +17,8 @@ export const dictionary = {
     orderSummary: "Order summary",
     items: "Items",
     total: "Total",
-    continueShopping: "Continue shopping"
+    continueShopping: "Continue shopping",
+    missingPriceWarning: "* Total excludes items without price"
   },
   productList: {
     loading: "Loading products...",

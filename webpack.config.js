@@ -41,18 +41,24 @@ module.exports = {
           exclude: /\.module\.css$/,
           use: ["style-loader", "css-loader"],
       },
+      {
+          test: /\.svg$/,
+          type: "asset/resource",
+          generator: {
+              filename: "[name][ext]",
+          },
+      },
       ],
   },
 
   plugins: [
       new HtmlWebpackPlugin({
-          template: "./public/index.html",
-          favicon: "./public/favicon.svg",
+          template: "./public/index.html"
       }),
   ],
 
   devServer: {
-      static: "./dist",
+      static: ["./dist", "./public"],
       port: 3000,
       open: true,
       historyApiFallback: true,

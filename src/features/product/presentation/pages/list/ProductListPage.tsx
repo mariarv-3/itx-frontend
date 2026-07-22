@@ -68,15 +68,15 @@ export function ProductListPage() {
 
   return (
     <main className={styles.container}>
-        <ProductSearchPanel
-          searchQuery={searchQuery}
-          onSearchChange={setSearchQuery}
-          resultCount={filteredProducts.length}
-        />
-        <ProductGrid
-          products={filteredProducts}
-          searchQuery={searchQuery}
-        />
-      </main>
+      <ProductSearchPanel
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        resultCount={filteredProducts.length}
+      />
+      <ProductGrid
+        products={filteredProducts}
+        searchQuery={searchQuery}
+      />
+    </main>
   );
 }

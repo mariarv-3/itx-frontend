@@ -57,6 +57,14 @@ export const CartPage = () => {
                       <span>
                         {item.product.options.storages.find((storage) => storage.code === item.storageCode)?.name ?? dictionary.cart.storage}
                       </span>
+                      <span className={styles.itemPrice}>
+                        {item.product.price
+                          ? Number(item.product.price).toLocaleString("es-ES", {
+                              style: "currency",
+                              currency: "EUR",
+                            })
+                          : dictionary.productItem.priceUnavailable}
+                      </span>
                     </div>
                     <div className={styles.footer}>
                       <div className={styles.quantityControls} role="group" aria-label="Quantity controls">
@@ -109,9 +117,11 @@ export const CartPage = () => {
                   })}
                 </strong>
               </div>
-              <Link to="/" className={styles.primaryLink}>
-                {dictionary.cart.continueShopping}
-              </Link>
+              {items.some((item) => !item.product.price) && (
+                <p className={styles.warningText}>
+                  {dictionary.cart.missingPriceWarning}
+                </p>
+              )}
             </aside>
           </div>
         )}
