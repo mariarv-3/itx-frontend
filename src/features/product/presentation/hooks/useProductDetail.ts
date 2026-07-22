@@ -25,8 +25,11 @@ export function useProductDetail(id: string | undefined) {
     let isActive = true;
 
     if (!id) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setProduct(null);
+
       setError(null);
+
       setIsLoading(false);
       return;
     }
