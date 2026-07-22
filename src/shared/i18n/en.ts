@@ -52,5 +52,10 @@ export const dictionary = {
   },
   searchBar: {
     placeholder: "Search by brand or model..."
+  },
+  errorBoundary: {
+    title: "Something went wrong",
+    description: "We're sorry, but an unexpected error occurred.",
+    action: "Reload page"
   }
 };

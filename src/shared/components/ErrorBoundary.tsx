@@ -1,5 +1,6 @@
 import { Component, ErrorInfo, ReactNode } from "react";
 import { EmptyState } from "./EmptyState";
+import { dictionary } from "../i18n/en";
 
 interface Props {
   children?: ReactNode;
@@ -27,8 +28,8 @@ export class ErrorBoundary extends Component<Props, State> {
       return (
         <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
           <EmptyState 
-            title="Something went wrong" 
-            description="We're sorry, but an unexpected error occurred." 
+            title={dictionary.errorBoundary.title} 
+            description={dictionary.errorBoundary.description} 
             action={
               <button 
                 onClick={() => window.location.reload()}
@@ -43,7 +44,7 @@ export class ErrorBoundary extends Component<Props, State> {
                   fontSize: "0.9rem"
                 }}
               >
-                Reload Page
+                {dictionary.errorBoundary.action}
               </button>
             } 
           />
