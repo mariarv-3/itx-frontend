@@ -4,13 +4,13 @@
   align-items: center;
   justify-content: center;
   text-align: center;
+  border-radius: var(--radius-lg);
+  border: 1px solid #e5e7eb;
   padding: 4rem 2rem;
   grid-column: 1 / -1;
   width: 100%;
-  border: 1px solid #e5e7eb;
-  border-radius: 20px;
-  background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
+  background: #fff;
+  box-shadow: var(--shadow-md);
   animation: fadeIn 0.4s ease-out;
 }
 

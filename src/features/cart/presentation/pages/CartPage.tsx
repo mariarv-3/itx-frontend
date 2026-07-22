@@ -10,6 +10,10 @@ export const CartPage = () => {
   return (
     <div className={styles.page}>
       <div className={styles.container}>
+        <Link to="/" className={styles.back}>
+          <span className={styles.backArrow}>←</span>
+          {dictionary.cart.continueShopping}
+        </Link>
         <div className={styles.headerRow}>
           <div>
             <p className={styles.eyebrow}>{dictionary.cart.title}</p>

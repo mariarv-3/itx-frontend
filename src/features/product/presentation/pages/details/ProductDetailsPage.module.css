@@ -19,12 +19,25 @@
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: #8b8b8b;
   text-decoration: none;
   margin-bottom: 3rem;
   border-radius: 999px;
   transition: all 0.2s ease;
   cursor: pointer;
+  position: sticky;
+  top: 6.5rem;
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: var(--shadow-sm);
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.back:focus-visible {
+  outline: none;
 }
 
 .back:hover { 
@@ -50,13 +63,13 @@
 
 .imageWrapper {
   position: sticky;
-  top: 6rem;
+  top: 6.5rem;
 }
 
 .imageContainer {
-  aspect-ratio: 1;
+  aspect-ratio: 4 / 5;
   background-color: #f7f7f7;
-  border-radius: 28px;
+  border-radius: var(--radius-lg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -163,8 +176,8 @@
   padding: 0.75rem 1.25rem;
   background: #f0fdf4;
   border: 1px solid #bbf7d0;
-  border-radius: 12px;
-  font-size: 0.82rem;
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
   color: #15803d;
   font-weight: 500;
   animation: fadeIn 0.25s ease;
@@ -178,8 +191,8 @@
   padding: 0.75rem 1.25rem;
   background: #fef2f2;
   border: 1px solid #fecaca;
-  border-radius: 12px;
-  font-size: 0.82rem;
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
   color: #b91c1c;
   font-weight: 500;
   animation: fadeIn 0.25s ease;
