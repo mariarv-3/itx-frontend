@@ -57,19 +57,24 @@ export const CartPage = () => {
                       </span>
                     </div>
                     <div className={styles.footer}>
-                      <div className={styles.quantityControls}>
+                      <div className={styles.quantityControls} role="group" aria-label="Quantity controls">
                         <button
                           type="button"
                           className={styles.quantityButton}
                           onClick={() => updateQuantity(item.product.id, item.colorCode, item.storageCode, -1)}
+                          aria-label="Decrease quantity"
                         >
                           −
                         </button>
-                        <span className={styles.quantity}>{dictionary.cart.qty(item.quantity)}</span>
+                        <span className={styles.quantity} aria-live="polite" aria-atomic="true">
+                          <span className="visually-hidden">Quantity: </span>
+                          {item.quantity}
+                        </span>
                         <button
                           type="button"
                           className={styles.quantityButton}
                           onClick={() => updateQuantity(item.product.id, item.colorCode, item.storageCode, 1)}
+                          aria-label="Increase quantity"
                         >
                           +
                         </button>

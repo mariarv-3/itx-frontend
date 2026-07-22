@@ -44,13 +44,8 @@ function normalizeOptions(
   options?: ProductDetailApiResponse["options"]
 ) {
   return {
-    colors: options?.colors?.filter(
-      color => color.name.trim()
-    ) ?? [],
-
-    storages: options?.storages?.filter(
-      storage => storage.name.trim()
-    ) ?? [],
+    colors: options?.colors ?? [],
+    storages: options?.storages ?? [],
   };
 }
 

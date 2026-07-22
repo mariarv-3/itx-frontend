@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 
 import { useProductDetail } from "../../hooks/useProductDetail";
 import { useBreadcrumb } from "../../../../../shared/context/BreadcrumbContext";
@@ -22,6 +22,7 @@ const addToCartUseCase = new AddToCartUseCase(new CartApiRepository());
 
 export const ProductDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const { addItem } = useCart();
   const { setProductName } = useBreadcrumb();
   const { product, isLoading, error, retryCount, retry } = useProductDetail(id);
@@ -49,8 +50,13 @@ export const ProductDetailsPage = () => {
     ? selectedStorage
     : (product?.options.storages?.[0]?.code ?? null);
 
+  const hasColors = (product?.options.colors?.length ?? 0) > 0;
+  const hasStorages = (product?.options.storages?.length ?? 0) > 0;
+  const isOutOfStock = product !== null && (!hasColors || !hasStorages);
+
   const canAddToCart =
     product !== null &&
+    !isOutOfStock &&
     currentColor !== null &&
     currentStorage !== null;
 
@@ -74,11 +80,20 @@ export const ProductDetailsPage = () => {
     }
   };
 
+  const handleBack = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    if (window.history.length > 2) {
+      navigate(-1);
+    } else {
+      navigate("/", { replace: true });
+    }
+  };
+
   return (
     <div className={styles.page}>
       <div className={styles.container}>
-        <Link to="/" className={styles.back}>
-          <span className={styles.backArrow}>←</span>
+        <Link to="/" onClick={handleBack} className={styles.back}>
+          <span className={styles.backArrow} aria-hidden="true">←</span>
           {dictionary.productDetails.back}
         </Link>
 
@@ -158,7 +173,7 @@ export const ProductDetailsPage = () => {
                   onClick={handleAddToCart}
                   disabled={!canAddToCart || isAddingToCart}
                 >
-                  {dictionary.productDetails.addToCart}
+                  {isOutOfStock ? dictionary.productDetails.outOfStock : dictionary.productDetails.addToCart}
                 </button>
 
                 {added && <div className={styles.toast}>{dictionary.productDetails.addedSuccess}</div>}

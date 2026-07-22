@@ -37,7 +37,7 @@ export const ProductOptions = ({
                   backgroundColor: getColorValue(color.name),
                 }}
                 onClick={() => onColorSelect(color.code)}
-                aria-label={color.name}
+                aria-label={color.name.trim() || dictionary.productDetails.defaultOption}
                 aria-pressed={currentColor === color.code}
               />
             ))}
@@ -59,10 +59,10 @@ export const ProductOptions = ({
                   currentStorage === storage.code ? styles.chipSelected : ""
                 }`}
                 onClick={() => onStorageSelect(storage.code)}
-                aria-label={`Storage capacity ${storage.name}`}
+                aria-label={`Storage capacity ${storage.name.trim() || dictionary.productDetails.defaultOption}`}
                 aria-pressed={currentStorage === storage.code}
               >
-                {storage.name}
+                {storage.name.trim() || dictionary.productDetails.defaultOption}
               </button>
             ))}
           </div>

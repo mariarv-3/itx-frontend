@@ -45,7 +45,9 @@ export const dictionary = {
     priceUnavailable: "Price unavailable",
     loading: "Loading…",
     errorLoad: "Error Loading Product Details",
-    retry: "Try again"
+    retry: "Try again",
+    outOfStock: "Out of stock",
+    defaultOption: "Standard"
   },
   productItem: {
     priceUnavailable: "Price unavailable"
