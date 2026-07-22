@@ -89,7 +89,7 @@ src/
 - React Router 7
 - CSS Modules
 - Webpack 5 + Babel
-- Jest + React Testing Library
+- **Testing:** Jest + React Testing Library + Cypress
 
 ---
 
@@ -110,16 +110,21 @@ src/
 
 ## Testing
 
-Current status: 8 test suites and 30+ tests covering use cases, repository logic, mapping, UI behavior and search filtering.
+The project implements a comprehensive testing strategy covering the pyramid from unit to E2E:
 
-Examples:
-- use case tests
-- API repository and mapper tests
-- cache tests
-- component tests for search and product list behavior
+### Unit & Integration Tests (Jest + RTL)
+Current status: **8 test suites and 30+ tests** covering business logic and UI behavior.
+- **Domain & App:** Use case tests, Mapper transformations.
+- **Infrastructure:** API repository logic (timeouts, retries), Cache management.
+- **Presentation:** Component rendering, Search filtering interactions.
 
-**End-to-End Tests (Cypress)**
-A full E2E purchase flow is simulated with Cypress. Make sure the app is running (`npm start`) before executing the tests.
+### End-to-End Tests (Cypress)
+A complete purchase flow is automated with Cypress, testing the critical path as a real user would:
+1. Search and filter a device.
+2. Select options (Color, Storage).
+3. Add to cart and verify cart persistence.
+
+Make sure the app is running (`npm start`) before executing the tests.
 ```bash
 # Run tests headlessly
 npm run test:e2e
@@ -177,7 +182,7 @@ Due to the open nature of the requirements, the following assumptions were made:
 
 A few sensible follow-ups that fit this project well:
 - Add pagination or infinite scroll if the catalog grows beyond the current demo size.
-- **Image Optimization:** Integrate an Image CDN (like Cloudinary or Imgix) or request backend support to serve WebP/AVIF formats and properly sized images (e.g., thumbnails for the grid), which will drastically improve LCP and overall download times.
+- **Image Optimization:** Serve WebP/AVIF thumbnails from the backend or an Image CDN to reduce network payload and improve LCP.
 - Continue refining the visual system with more shared tokens and reusable UI patterns.
 - Improve accessibility gradually with better keyboard support and contrast checks.
 
