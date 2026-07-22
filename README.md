@@ -2,6 +2,8 @@
 
 A responsive SPA for browsing mobile devices, built with React 19, TypeScript and a feature-oriented architecture.
 
+![Store Demo](./demo-store.gif)
+
 ---
 
 ## Quick start
