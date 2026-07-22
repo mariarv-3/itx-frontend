@@ -1,55 +1,52 @@
 .specsSection {
-  margin-top: 3.5rem;
-  padding-top: 2.5rem;
-  border-top: 1px solid #eaeaea;
+  margin-top: 5rem;
+  background: var(--surface-muted);
+  padding: 3rem;
+  border-radius: var(--radius-lg);
 }
 
 .specsTitle {
-  font-size: 0.72rem;
+  font-size: 1.25rem;
   font-weight: 600;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: #8b8b8b;
-  margin: 0 0 1.5rem;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin: 0 0 3rem;
 }
 
 .specsTable {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
 }
 
 .specRow {
   display: grid;
-  grid-template-columns: 140px 1fr;
-  gap: 1rem;
-  padding: 1.25rem 0;
-  border-bottom: 1px solid #f0f0f0;
-  font-size: 0.9rem;
-  line-height: 1.6;
-}
-
-.specRow:last-child {
-  border-bottom: none;
+  grid-template-columns: 200px 1fr;
+  gap: 2rem;
 }
 
 .specKey {
-  color: #8b8b8b;
-  font-weight: 400;
-  font-size: 0.9rem;
-  text-transform: capitalize;
-  letter-spacing: normal;
+  color: var(--text);
+  font-weight: 500;
+  font-size: 0.95rem;
 }
 
 .specValue {
-  color: #111;
-  font-weight: 500;
-  font-size: 0.9rem;
+  color: var(--text-muted);
+  font-weight: 400;
+  font-size: 0.95rem;
+  line-height: 1.6;
 }
 
 @media (max-width: 768px) {
+  .specsSection {
+    margin-top: 4rem;
+    padding: 2rem;
+    border-radius: var(--radius-md);
+  }
+  
   .specRow {
-    grid-template-columns: 120px 1fr;
-    padding: 1rem 0;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
   }
 }

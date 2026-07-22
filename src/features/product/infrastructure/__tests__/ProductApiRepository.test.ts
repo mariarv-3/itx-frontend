@@ -3,6 +3,12 @@ import { LocalStorageCache } from "../cache/LocalStorageCache";
 
 describe("ProductApiRepository", () => {
   beforeEach(() => {
+    Object.defineProperty(globalThis, "fetch", {
+      value: jest.fn(),
+      writable: true,
+      configurable: true,
+    });
+
     Object.defineProperty(globalThis, "localStorage", {
       value: {
         getItem: jest.fn().mockReturnValue(null),
@@ -16,6 +22,8 @@ describe("ProductApiRepository", () => {
 
   afterEach(() => {
     jest.restoreAllMocks();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    delete (globalThis as any).fetch;
   });
 
 

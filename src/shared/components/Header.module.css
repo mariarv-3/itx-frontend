@@ -17,7 +17,7 @@
   font-weight: 600;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: #000;
+  color: var(--text);
   transition: opacity 0.2s ease;
 }
 
@@ -27,7 +27,7 @@
 
 .breadcrumbs {
   font-size: 0.85rem;
-  color: #8b8b8b;
+  color: var(--text-secondary);
   font-weight: 400;
 }
 
@@ -51,7 +51,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #111;
+  color: var(--text);
 }
 
 @keyframes bump {

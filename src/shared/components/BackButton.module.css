@@ -8,7 +8,7 @@
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #8b8b8b;
+  color: var(--text-secondary);
   text-decoration: none;
   margin-bottom: 3rem;
   border-radius: 999px;

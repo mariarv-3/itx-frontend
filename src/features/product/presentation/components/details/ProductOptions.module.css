@@ -10,7 +10,7 @@
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #8b8b8b;
+  color: var(--text-secondary);
   margin: 0 0 0.75rem;
 }
 
@@ -25,7 +25,7 @@
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--border-strong);
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
   outline: none;
@@ -36,7 +36,7 @@
 }
 
 .swatchSelected {
-  box-shadow: 0 0 0 2px #fff, 0 0 0 4px #111;
+  box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--text);
 }
 
 
@@ -51,27 +51,27 @@
   font-family: inherit;
   font-size: 0.8rem;
   font-weight: 500;
-  color: #555;
-  background: #f7f7f7;
-  border: 1px solid #eaeaea;
+  color: var(--text-muted);
+  background: var(--surface-muted);
+  border: 1px solid var(--border);
   border-radius: 100px;
   cursor: pointer;
   transition: all 0.15s ease;
 }
 
 .chip:hover {
-  border-color: #111;
-  color: #111;
+  border-color: var(--text);
+  color: var(--text);
 }
 
 .chipSelected {
-  background: #111;
-  border-color: #111;
-  color: #fff;
+  background: var(--text);
+  border-color: var(--text);
+  color: var(--surface);
 }
 
 .chipSelected:hover {
-  background: #111;
-  border-color: #111;
-  color: #fff;
+  background: var(--text);
+  border-color: var(--text);
+  color: var(--surface);
 }

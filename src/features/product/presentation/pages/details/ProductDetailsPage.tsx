@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 import { useProductDetail } from "../../hooks/useProductDetail";
 import { useBreadcrumb } from "../../../../../shared/context/BreadcrumbContext";
@@ -43,6 +43,15 @@ export const ProductDetailsPage = () => {
   const [added, setAdded] = useState(false);
   const [cartError, setCartError] = useState<string | null>(null);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
+
+  const [prevId, setPrevId] = useState(id);
+  if (id !== prevId) {
+    setPrevId(id);
+    setSelectedColor(null);
+    setSelectedStorage(null);
+    setAdded(false);
+    setCartError(null);
+  }
 
   const currentColor = selectedColor !== null
     ? selectedColor

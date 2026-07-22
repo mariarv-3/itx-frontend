@@ -71,7 +71,7 @@
 .retryButton {
   border: none;
   border-radius: 999px;
-  background: #111827;
+  background: var(--text);
   color: white;
   padding: var(--space-3) var(--space-4);
   font-size: 0.9rem;
@@ -81,7 +81,7 @@
 }
 
 .retryButton:hover {
-  background: #1f2937;
+  background: var(--accent-hover);
   transform: translateY(-1px);
 }
 

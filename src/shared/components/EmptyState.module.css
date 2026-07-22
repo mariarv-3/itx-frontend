@@ -5,11 +5,11 @@
   justify-content: center;
   text-align: center;
   border-radius: var(--radius-lg);
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border);
   padding: 4rem 2rem;
   grid-column: 1 / -1;
   width: 100%;
-  background: #fff;
+  background: var(--surface);
   box-shadow: var(--shadow-md);
   animation: fadeIn 0.4s ease-out;
 }
@@ -21,21 +21,21 @@
   width: 84px;
   height: 84px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #eef2ff 0%, #f5f3ff 100%);
-  color: #4f46e5;
+  background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary-lighter) 100%);
+  color: var(--primary);
   margin-bottom: 1.5rem;
 }
 
 .title {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #111827;
+  color: var(--text);
   margin: 0 0 0.5rem 0;
 }
 
 .description {
   font-size: 0.95rem;
-  color: #6b7280;
+  color: var(--text-muted);
   max-width: 420px;
   margin: 0;
   line-height: 1.6;
