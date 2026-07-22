@@ -3,11 +3,11 @@ import type { ProductRepository } from "../domain/ProductRepository";
 import type { ProductApiResponse, ProductDetailApiResponse } from "./ProductApiResponse";
 import { LocalStorageCache } from "./cache/LocalStorageCache";
 import { API_URL } from "../../../shared/config/api";
+import { API_TIMEOUT_MS } from "../../../shared/config/constants";
 import { mapProduct, mapProductDetail } from "./ProductMapper";
 
 export class ProductApiRepository implements ProductRepository {
   private readonly pendingRequests = new Map<string, Promise<unknown>>();
-  private readonly requestTimeoutMs = 8000;
   private readonly retryCount = 2;
 
   constructor(

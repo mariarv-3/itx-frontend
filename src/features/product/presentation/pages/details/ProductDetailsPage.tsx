@@ -11,6 +11,7 @@ import { ProductSpecs } from "../../components/details/ProductSpecs";
 import { useCart } from "../../../../../features/cart/presentation/CartContext";
 import { CartApiRepository } from "../../../../../features/cart/infrastructure/CartApiRepository";
 import { AddToCartUseCase } from "../../../../../features/cart/application/AddToCartUseCase";
+import { TOAST_DURATION_MS } from "../../../../../shared/config/constants";
 
 
 import { Skeleton } from "../../../../../shared/components/Skeleton";
@@ -72,7 +73,7 @@ export const ProductDetailsPage = () => {
       addItem(product, currentColor, currentStorage);
 
       setAdded(true);
-      setTimeout(() => setAdded(false), 2500);
+      setTimeout(() => setAdded(false), TOAST_DURATION_MS);
     } catch (err) {
       setCartError(err instanceof Error ? err.message : dictionary.productDetails.errorAddCart);
     } finally {
@@ -98,7 +99,8 @@ export const ProductDetailsPage = () => {
         </Link>
 
         {isLoading && (
-          <div className={styles.layout}>
+          <div className={styles.layout} aria-busy="true" aria-live="polite">
+            <span className="visually-hidden">{dictionary.productDetails.loading}</span>
             <div className={styles.imageWrapper}>
               <Skeleton width="100%" height="400px" borderRadius="16px" />
             </div>

@@ -3,8 +3,10 @@ interface CacheItem<T> {
   data: T;
 }
 
+import { CACHE_EXPIRATION_TIME_MS } from "../../../../shared/config/constants";
+
 export class LocalStorageCache {
-  constructor(private readonly expirationTime = 60 * 60 * 1000) {
+  constructor(private readonly expirationTime = CACHE_EXPIRATION_TIME_MS) {
 
   }
 

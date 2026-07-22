@@ -43,7 +43,8 @@ export function ProductListPage() {
 
   if (isLoading) {
     return (
-      <main className={styles.container}>
+      <main className={styles.container} aria-busy="true" aria-live="polite">
+        <span className="visually-hidden">{dictionary.productList.loading}</span>
         <ProductListSkeleton />
       </main>
     );
