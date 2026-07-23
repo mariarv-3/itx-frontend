@@ -4,6 +4,7 @@ import { useBreadcrumb } from '../context/BreadcrumbContext';
 import { useEffect, useState } from 'react';
 import { dictionary } from '../i18n/en';
 import styles from './Header.module.css';
+import { AppRoutes } from '../config/routes';
 
 export const Header = () => {
   const location = useLocation();
@@ -22,11 +23,11 @@ export const Header = () => {
   return (
     <header className={styles.header}>
       <div>
-        <Link to="/" className={styles.logo}>
+        <Link to={AppRoutes.HOME} className={styles.logo}>
           {dictionary.header.title}
         </Link>
         <nav className={styles.breadcrumbs}>
-          <Link to="/">{dictionary.header.home}</Link>
+          <Link to={AppRoutes.HOME}>{dictionary.header.home}</Link>
           {location.pathname.startsWith('/product/') && productName && (
             <span>
               {' / '}
@@ -36,7 +37,7 @@ export const Header = () => {
         </nav>
       </div>
 
-      <Link to="/cart" className={`${styles.cart} ${isBumping ? styles.cartBumping : ''}`}>
+      <Link to={`/${AppRoutes.CART}`} className={`${styles.cart} ${isBumping ? styles.cartBumping : ''}`}>
         <div className={styles.cartIcon}>
           <svg
             xmlns="http://www.w3.org/2000/svg"

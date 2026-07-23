@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 import { useProductDetail } from "../../hooks/useProductDetail";
@@ -41,7 +41,7 @@ export const ProductDetailsPage = () => {
   const [selectedStorage, setSelectedStorage] = useState<number | null>(null);
 
   const [added, setAdded] = useState(false);
-  const timeoutRef = React.useRef<NodeJS.Timeout>();
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     return () => {
