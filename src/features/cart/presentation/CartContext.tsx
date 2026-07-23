@@ -65,6 +65,24 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     }
   }, [items]);
 
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === CART_STORAGE_KEY && e.newValue) {
+        try {
+          const parsed = JSON.parse(e.newValue) as CartItem[];
+          if (Array.isArray(parsed)) {
+            setItems(parsed);
+          }
+        } catch {
+          // Ignore malformed payloads from other tabs
+        }
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
+
   const addItem = (product: ProductDetail, colorCode: number, storageCode: number) => {
     setItems((prev) => {
       const existing = prev.find((item) => isSameItem(item, product.id, colorCode, storageCode));

@@ -42,6 +42,15 @@ describe("mapProduct", () => {
 
     expect(result.price).toBe(1299);
   });
+
+  it("strips non-numeric characters from dirty price strings", () => {
+    const result = mapProduct({
+      ...baseResponse,
+      price: "1299 EUR",
+    });
+
+    expect(result.price).toBe(1299);
+  });
 });
 
 

@@ -115,7 +115,7 @@ src/
 The project implements a comprehensive testing strategy covering the pyramid from unit to E2E:
 
 ### Unit & Integration Tests (Jest + RTL)
-Current status: **8 test suites and 30+ tests** covering business logic and UI behavior.
+Current status: **9 test suites and 55 tests** covering business logic and UI behavior.
 - **Domain & App:** Use case tests, Mapper transformations.
 - **Infrastructure:** API repository logic (timeouts, retries), Cache management.
 - **Presentation:** Component rendering, Search filtering interactions.
@@ -184,10 +184,11 @@ Due to the open nature of the requirements, the following assumptions were made:
 ## Notes and next improvements
 
 A few sensible follow-ups that fit this project well:
-- Add pagination or infinite scroll if the catalog grows beyond the current demo size.
-- **Image Optimization:** Serve WebP/AVIF thumbnails from the backend or an Image CDN to reduce network payload and improve LCP.
-- Continue refining the visual system with more shared tokens and reusable UI patterns.
-- Improve accessibility gradually with better keyboard support and contrast checks.
+- **Pagination / Infinite Scroll:** Essential if the catalog grows beyond the current demo size to maintain fast initial loads.
+- **Debounced Search:** Adding a small delay (e.g., 300ms) to the search input to avoid blocking the React main thread when filtering massive catalogs.
+- **Shared HTTP Client:** Extracting the robust retry and timeout logic from `ProductApiRepository` into a shared utility to reuse it across future API domains.
+- **Image Optimization:** Serve WebP/AVIF thumbnails from the backend or an Image CDN to reduce network payloads and improve LCP.
+- **Visual & Accessibility:** Continue refining shared UI tokens and enhancing keyboard support/contrast ratios.
 
 ---
 

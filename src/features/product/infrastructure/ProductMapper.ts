@@ -32,9 +32,10 @@ function normalizePrice(price?: string | null): number | null {
     return null;
   }
 
-  const value = Number(price);
+  const cleanPrice = price.replace(/[^\d.-]/g, "");
+  const value = Number(cleanPrice);
 
-  return Number.isNaN(value)
+  return Number.isNaN(value) || cleanPrice === ""
     ? null
     : value;
 }
