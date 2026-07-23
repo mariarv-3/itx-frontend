@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useDebounce } from "../../../../../shared/hooks/useDebounce";
 import { useProducts } from "../../hooks/useProducts";
 
 import { EmptyState } from "../../../../../shared/components/EmptyState";
@@ -36,10 +37,12 @@ export const filterProductsByQuery = (products: Product[], query: string) => {
 export function ProductListPage() {
   const { products, isLoading, error, retryCount, retry } = useProducts();
   const [searchQuery, setSearchQuery] = useState("");
+  const debouncedQuery = useDebounce(searchQuery, 300);
+  const isSearching = searchQuery !== debouncedQuery;
 
   const filteredProducts = useMemo(() => {
-    return filterProductsByQuery(products, searchQuery);
-  }, [products, searchQuery]);
+    return filterProductsByQuery(products, debouncedQuery);
+  }, [products, debouncedQuery]);
 
   if (isLoading) {
     return (
@@ -76,6 +79,7 @@ export function ProductListPage() {
       <ProductGrid
         products={filteredProducts}
         searchQuery={searchQuery}
+        isSearching={isSearching}
       />
     </main>
   );

@@ -7,11 +7,12 @@ import styles from "../ProductListPage.module.css";
 interface ProductGridProps {
   products: Product[];
   searchQuery: string;
+  isSearching?: boolean;
 }
 
-export const ProductGrid = ({ products, searchQuery }: ProductGridProps) => {
+export const ProductGrid = ({ products, searchQuery, isSearching }: ProductGridProps) => {
   return (
-    <div className={styles.grid}>
+    <div className={`${styles.grid} ${isSearching ? styles.isSearching : ""}`}>
       {products.length > 0 ? (
         products.map((product, index) => (
           <ProductItem

@@ -99,7 +99,7 @@ src/
 
 - Product list page with responsive grid and rich card UI
 - Product detail page with options, specs and add-to-cart flow
-- Search with normalized multi-term matching across brand and model
+- Search with normalized multi-term matching across brand and model, featuring a 300ms debounce to optimize rendering performance
 - Cart state persisted in local storage so it survives reloads
 - **Network Resilience:** Robust API repository layer with custom strict timeouts (`Promise.race`), automatic retries for network failures, and defensive programming against native `fetch` hanging bugs.
 - Client-side cache for product data with TTL-based invalidation
@@ -185,7 +185,6 @@ Due to the open nature of the requirements, the following assumptions were made:
 
 A few sensible follow-ups that fit this project well:
 - **Pagination / Infinite Scroll:** Essential if the catalog grows beyond the current demo size to maintain fast initial loads.
-- **Debounced Search:** Adding a small delay (e.g., 300ms) to the search input to avoid blocking the React main thread when filtering massive catalogs.
 - **Shared HTTP Client:** Extracting the robust retry and timeout logic from `ProductApiRepository` into a shared utility to reuse it across future API domains.
 - **Image Optimization:** Serve WebP/AVIF thumbnails from the backend or an Image CDN to reduce network payloads and improve LCP.
 - **Visual & Accessibility:** Continue refining shared UI tokens and enhancing keyboard support/contrast ratios.

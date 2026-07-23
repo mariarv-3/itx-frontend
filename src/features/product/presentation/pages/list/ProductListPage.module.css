@@ -80,6 +80,13 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1.75rem;
+  transition: opacity 0.2s ease, filter 0.2s ease;
+}
+
+.isSearching {
+  opacity: 0.4;
+  filter: grayscale(100%);
+  pointer-events: none;
 }
 
 .retryButton {
