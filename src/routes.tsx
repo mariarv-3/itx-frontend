@@ -4,10 +4,11 @@ import App from "./App";
 import { ProductListPage } from "./features/product/presentation/pages/list/ProductListPage";
 import { ProductDetailsPage } from "./features/product/presentation/pages/details/ProductDetailsPage";
 import { CartPage } from "./features/cart/presentation/pages/CartPage";
+import { AppRoutes } from "./shared/config/routes";
 
 export const router = createBrowserRouter([
     {
-    path: "/",
+    path: AppRoutes.HOME,
     element: <App />,
     children: [
         {
@@ -15,11 +16,11 @@ export const router = createBrowserRouter([
             element: <ProductListPage />,
         },
         {
-            path: "product/:id",
+            path: AppRoutes.PRODUCT_ROUTE,
             element: <ProductDetailsPage />,
         },
         {
-            path: "cart",
+            path: AppRoutes.CART,
             element: <CartPage />,
         },
         ],

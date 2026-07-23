@@ -27,15 +27,15 @@ export class ErrorBoundary extends Component<Props, State> {
     if (this.state.hasError) {
       return (
         <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <EmptyState 
-            title={dictionary.errorBoundary.title} 
-            description={dictionary.errorBoundary.description} 
+          <EmptyState
+            title={dictionary.errorBoundary.title}
+            description={dictionary.errorBoundary.description}
             action={
-              <button 
+              <button
                 onClick={() => window.location.reload()}
                 style={{
                   padding: "0.75rem 1.5rem",
-                  background: "#111",
+                  background: "var(--boundary-bg)",
                   color: "white",
                   border: "none",
                   borderRadius: "99px",
@@ -46,7 +46,7 @@ export class ErrorBoundary extends Component<Props, State> {
               >
                 {dictionary.errorBoundary.action}
               </button>
-            } 
+            }
           />
         </div>
       );

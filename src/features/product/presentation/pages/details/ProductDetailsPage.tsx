@@ -41,6 +41,15 @@ export const ProductDetailsPage = () => {
   const [selectedStorage, setSelectedStorage] = useState<number | null>(null);
 
   const [added, setAdded] = useState(false);
+  const timeoutRef = React.useRef<NodeJS.Timeout>();
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
   const [cartError, setCartError] = useState<string | null>(null);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
 
@@ -83,7 +92,11 @@ export const ProductDetailsPage = () => {
       addItem(product, currentColor, currentStorage);
 
       setAdded(true);
-      setTimeout(() => setAdded(false), TOAST_DURATION_MS);
+      
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+      timeoutRef.current = setTimeout(() => setAdded(false), TOAST_DURATION_MS);
     } catch (err) {
       setCartError(err instanceof Error ? err.message : dictionary.productDetails.errorAddCart);
     } finally {

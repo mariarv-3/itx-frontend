@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import type { Product } from '../../domain/Product';
 import { dictionary } from '../../../../shared/i18n/en';
+import { AppRoutes } from '../../../../shared/config/routes';
 import styles from './ProductItem.module.css';
 
 interface ProductItemProps {
@@ -10,7 +11,7 @@ interface ProductItemProps {
 
 export const ProductItem = ({ product, isPriority = false }: ProductItemProps) => (
   <Link
-    to={`/product/${product.id}`}
+    to={AppRoutes.PRODUCT(product.id)}
     className={styles.card}
     aria-label={`${product.brand} ${product.model}`}
   >
