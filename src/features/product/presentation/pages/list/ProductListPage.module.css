@@ -32,20 +32,25 @@
 
 .resultsMeta {
   display: flex;
-  flex-wrap: wrap;
   gap: 0.6rem;
   align-items: center;
   color: var(--text-muted);
   font-size: 0.9rem;
+  flex: 1;
+  min-width: 0;
 }
 
 .resultsCount {
   font-weight: 600;
   color: var(--text);
+  flex-shrink: 0;
 }
 
 .resultsHint {
   color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .searchControls {
@@ -55,6 +60,7 @@
   justify-content: flex-end;
   flex: 1;
   max-width: 500px;
+  min-width: 280px;
 }
 
 .clearButton {
